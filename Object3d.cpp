@@ -619,6 +619,18 @@ void Object3d::UpdateViewMatrix()
 
 	//(仮の)上方向
 	XMVECTOR upVector = XMLoadFloat3(&up);
+
+	//カメラ座標(視線方向)
+	XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
+
+	//0ベクトルだと向きが定まらないので除外
+	assert(!XMVector3Equal(cameraAxisZ, XMVectorZero()));
+	assert(!XMVector3IsInfinite(cameraAxisZ));
+	assert(!XMVector3Equal(upVector, XMVectorZero()));
+	assert(!XMVector3IsInfinite(upVector));
+
+	//ベクトルを正規化
+	cameraAxisZ = XMVector3Normalize(cameraAxisZ);
 }
 
 bool Object3d::Initialize()
