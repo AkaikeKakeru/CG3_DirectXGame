@@ -653,6 +653,9 @@ void Object3d::UpdateViewMatrix()
 	matCameraRot.r[1] = cameraAxisY;
 	matCameraRot.r[2] = cameraAxisZ;
 	matCameraRot.r[3] = XMVectorSet(0,0,0,1);
+
+	//転置により逆行列(逆回転)を計算
+	matView = XMMatrixTranspose(matCameraRot);
 }
 
 bool Object3d::Initialize()
