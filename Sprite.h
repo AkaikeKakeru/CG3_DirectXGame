@@ -195,5 +195,10 @@ private: // メンバ関数
 	/// 頂点データ転送
 	/// </summary>
 	void TransferVertices();
+
+public: // メンバ関数
+	//座標の取得
+	const XMFLOAT2& GetPosition() { return position; }
+
 };
 
