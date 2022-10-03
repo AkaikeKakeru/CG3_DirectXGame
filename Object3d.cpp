@@ -656,6 +656,17 @@ void Object3d::UpdateViewMatrix()
 
 	//転置により逆行列(逆回転)を計算
 	matView = XMMatrixTranspose(matCameraRot);
+
+	//視点座標に-1を掛けた座標
+	XMVECTOR reverseEyePosition = XMVectorNegate(eyePosition);
+
+	//カメラの位置からワールド原点へのベクトル(カメラ座標系)
+	XMVECTOR tX = XMVector3Dot(cameraAxisX,reverseEyePosition); //X成分
+	XMVECTOR tY = XMVector3Dot(cameraAxisY,reverseEyePosition); //Y成分
+	XMVECTOR tZ = XMVector3Dot(cameraAxisZ,reverseEyePosition); //Z成分
+
+	//一つのベクトルにまとめる
+	XMVECTOR translation = XMVectorSet(tX.m128_f32[0],tY.m128_f32[1],tZ.m128_f32[2],1.0f);
 }
 
 bool Object3d::Initialize()
