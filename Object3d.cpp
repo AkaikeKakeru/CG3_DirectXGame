@@ -170,6 +170,8 @@ void Object3d::InitializeCamera(int window_width, int window_height)
 	//	XMLoadFloat3(&target),
 	//	XMLoadFloat3(&up));
 
+	//ビュー行列の計算
+	UpdateViewMatrix();
 
 	// 平行投影による射影行列の生成
 	//constMap->mat = XMMatrixOrthographicOffCenterLH(
