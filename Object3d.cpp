@@ -165,10 +165,11 @@ void Object3d::InitializeDescriptorHeap()
 void Object3d::InitializeCamera(int window_width, int window_height)
 {
 	// ビュー行列の生成
-	matView = XMMatrixLookAtLH(
-		XMLoadFloat3(&eye),
-		XMLoadFloat3(&target),
-		XMLoadFloat3(&up));
+	//matView = XMMatrixLookAtLH(
+	//	XMLoadFloat3(&eye),
+	//	XMLoadFloat3(&target),
+	//	XMLoadFloat3(&up));
+
 
 	// 平行投影による射影行列の生成
 	//constMap->mat = XMMatrixOrthographicOffCenterLH(
@@ -606,7 +607,7 @@ void Object3d::CreateModel()
 void Object3d::UpdateViewMatrix()
 {
 	// ビュー行列の更新
-	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+	//matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 }
 
 bool Object3d::Initialize()
