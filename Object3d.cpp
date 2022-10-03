@@ -525,6 +525,16 @@ void Object3d::CreateModel()
 	std::copy(std::begin(verticesSquare), std::end(verticesSquare),
 		vertices);
 
+	//四角形のインデックスデータ
+	unsigned short indicesSquare[] = {
+		0,1,2,//三角形1
+		2,1,3,//三角形2
+	};
+
+	//メンバ変数にコピー
+	std::copy(std::begin(indicesSquare), std::end(indicesSquare),
+		indices);
+
 	UINT sizeVB = static_cast<UINT>(sizeof(vertices));
 
 	// ヒーププロパティ
