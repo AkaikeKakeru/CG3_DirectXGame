@@ -636,6 +636,9 @@ void Object3d::UpdateViewMatrix()
 	XMVECTOR cameraAxisX;
 	//X軸は上方向→Z軸の外積で求まる
 	cameraAxisX = XMVector3Cross(upVector, cameraAxisZ);
+	//ベクトルを正規化
+	cameraAxisX = XMVector3Normalize(cameraAxisX);
+
 }
 
 bool Object3d::Initialize()
