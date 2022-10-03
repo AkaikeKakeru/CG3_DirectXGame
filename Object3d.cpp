@@ -613,22 +613,18 @@ void Object3d::UpdateViewMatrix()
 
 	//視点座標
 	XMVECTOR eyePosition = XMLoadFloat3(&eye);
-
 	//注視点座標
 	XMVECTOR targetPosition = XMLoadFloat3(&target);
-
 	//(仮の)上方向
 	XMVECTOR upVector = XMLoadFloat3(&up);
 
 	//カメラ座標(視線方向)
 	XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
-
 	//0ベクトルだと向きが定まらないので除外
 	assert(!XMVector3Equal(cameraAxisZ, XMVectorZero()));
 	assert(!XMVector3IsInfinite(cameraAxisZ));
 	assert(!XMVector3Equal(upVector, XMVectorZero()));
 	assert(!XMVector3IsInfinite(upVector));
-
 	//ベクトルを正規化
 	cameraAxisZ = XMVector3Normalize(cameraAxisZ);
 
@@ -659,14 +655,15 @@ void Object3d::UpdateViewMatrix()
 
 	//視点座標に-1を掛けた座標
 	XMVECTOR reverseEyePosition = XMVectorNegate(eyePosition);
-
 	//カメラの位置からワールド原点へのベクトル(カメラ座標系)
 	XMVECTOR tX = XMVector3Dot(cameraAxisX,reverseEyePosition); //X成分
 	XMVECTOR tY = XMVector3Dot(cameraAxisY,reverseEyePosition); //Y成分
 	XMVECTOR tZ = XMVector3Dot(cameraAxisZ,reverseEyePosition); //Z成分
-
 	//一つのベクトルにまとめる
 	XMVECTOR translation = XMVectorSet(tX.m128_f32[0],tY.m128_f32[1],tZ.m128_f32[2],1.0f);
+
+	//ビュー行列に平行移動成分を設定
+	matView.r[3] = translation;
 }
 
 bool Object3d::Initialize()
