@@ -3,6 +3,12 @@
 
 using namespace DirectX;
 
+template <class T>
+inline void safe_delete(T*& p) {
+	delete p;
+	p = nullptr;
+}
+
 GameScene::GameScene()
 {
 }
@@ -13,8 +19,8 @@ GameScene::~GameScene()
 	delete object3d;
 
 	//スプライトの解放
-	delete(sprite1);
-	delete(sprite2);
+	safe_delete(sprite1);
+	safe_delete(sprite2);
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
@@ -136,8 +142,8 @@ void GameScene::Draw()
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	sprite1->Draw();
-	sprite2->Draw();
+	//sprite1->Draw();
+	//sprite2->Draw();
 
 	// デバッグテキストの描画
 	debugText.DrawAll(cmdList);
