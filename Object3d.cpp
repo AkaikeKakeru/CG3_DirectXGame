@@ -610,6 +610,15 @@ void Object3d::UpdateViewMatrix()
 {
 	// ビュー行列の更新
 	//matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+
+	//視点座標
+	XMVECTOR eyePosition = XMLoadFloat3(&eye);
+
+	//注視点座標
+	XMVECTOR targetPosition = XMLoadFloat3(&target);
+
+	//(仮の)上方向
+	XMVECTOR upVector = XMLoadFloat3(&up);
 }
 
 bool Object3d::Initialize()
