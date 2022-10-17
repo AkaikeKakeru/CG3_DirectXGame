@@ -668,6 +668,14 @@ void Object3d::UpdateViewMatrix()
 
 	//ビュー行列に平行移動成分を設定
 	matView.r[3] = translation;
+
+#pragma region 全方向ビルボード行列の計算
+	//ビルボード行列
+	matBillboard.r[0] = cameraAxisX;
+	matBillboard.r[1] = cameraAxisY;
+	matBillboard.r[2] = cameraAxisZ;
+	matBillboard.r[3] = XMVectorSet(0,0,0,1);
+#pragma endregion
 }
 
 bool Object3d::Initialize()
