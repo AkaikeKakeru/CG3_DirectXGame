@@ -38,10 +38,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	debugText.Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	Sprite::LoadTexture(1, L"Resources/background.png");
+	//Sprite::LoadTexture(1, L"Resources/background.png");
 
-	//テクスチャ2番に読み込み
-	Sprite::LoadTexture(2, L"Resources/texture.png");
+	////テクスチャ2番に読み込み
+	//Sprite::LoadTexture(2, L"Resources/texture.png");
+
+	//草用テクスチャをテクスチャ2番に読み込み
+	Sprite::LoadTexture(2, L"Resources/kusa.png");
+
 
 	//座標{0,0}に、テクスチャ2番のスプライトを生成
 	sprite1 = Sprite::Create(2, { 0,0 });
@@ -49,7 +53,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	sprite2 = Sprite::Create(2, { 500,500 }, { 1,0,0,1 }, { 0,0 }, false, true);
 
 	// 背景スプライト生成
-	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
+	//spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
 	object3d = Object3d::Create();
 	object3d->Update();
@@ -107,7 +111,7 @@ void GameScene::Draw()
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
 	// 背景スプライト描画
-	spriteBG->Draw();
+	//spriteBG->Draw();
 
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
@@ -142,7 +146,7 @@ void GameScene::Draw()
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	//sprite1->Draw();
+	sprite1->Draw();
 	//sprite2->Draw();
 
 	// デバッグテキストの描画
