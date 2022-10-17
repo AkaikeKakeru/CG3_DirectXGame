@@ -676,6 +676,25 @@ void Object3d::UpdateViewMatrix()
 	matBillboard.r[2] = cameraAxisZ;
 	matBillboard.r[3] = XMVectorSet(0,0,0,1);
 #pragma endregion
+
+#pragma region Y軸回りビルボード行列の計算
+	//カメラX軸、Y軸、Z軸
+	XMVECTOR ybillCameraAxisX, ybillCameraAxisY, ybillCameraAxisZ;
+	
+	//X軸は共通
+	ybillCameraAxisX = cameraAxisX;
+	//Y軸はワールド座標系のY軸
+	ybillCameraAxisY = XMVector3Normalize(upVector);
+	//Z軸は→Y軸の外積で求まる
+	ybillCameraAxisZ = XMVector3Cross(
+		cameraAxisZ,cameraAxisY);
+
+	//Y軸回りビルボード行列
+	matBillboardY.r[0] = ybillCameraAxisX;
+	matBillboardY.r[1] = ybillCameraAxisY;
+	matBillboardY.r[2] = ybillCameraAxisZ;
+	matBillboardY.r[3] = XMVectorSet(0,0,0,1);
+#pragma endregion
 }
 
 bool Object3d::Initialize()
@@ -717,7 +736,8 @@ void Object3d::Update()
 	// ワールド行列の合成
 	matWorld = XMMatrixIdentity(); // 変形をリセット
 	
-	matWorld *= matBillboard; //ビルボード行列を掛ける
+	//matWorld *= matBillboard; //ビルボード行列を掛ける
+	matWorld *= matBillboardY; //Y軸ビルボード行列を掛ける
 	
 	matWorld *= matScale; // ワールド行列にスケーリングを反映
 	matWorld *= matRot; // ワールド行列に回転を反映
