@@ -226,7 +226,7 @@ void Object3d::InitializeGraphicsPipeline()
 		L"Resources/shaders/BasicGeometryShader.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
-		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
+		"main", "gs_5_0",	// エントリーポイント名、シェーダーモデル指定
 		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
 		0,
 		&gsBlob, &errorBlob);
