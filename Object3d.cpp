@@ -305,6 +305,9 @@ void Object3d::InitializeGraphicsPipeline()
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
+	//AlphaToCoverageEnableを有効化
+	gpipeline.BlendState.AlphaToCoverageEnable = true;
+
 	// デスクリプタレンジ
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
@@ -333,7 +336,6 @@ void Object3d::InitializeGraphicsPipeline()
 	// グラフィックスパイプラインの生成
 	result = device->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelinestate));
 	assert(SUCCEEDED(result));
-
 }
 
 void Object3d::LoadTexture()
@@ -737,11 +739,11 @@ void Object3d::Update()
 	// ワールド行列の合成
 	matWorld = XMMatrixIdentity(); // 変形をリセット
 	
-	//matWorld *= matBillboard; //ビルボード行列を掛ける
-	matWorld *= matBillboardY; //Y軸ビルボード行列を掛ける
 	
 	matWorld *= matScale; // ワールド行列にスケーリングを反映
 	matWorld *= matRot; // ワールド行列に回転を反映
+	//matWorld *= matBillboard; //ビルボード行列を掛ける
+	matWorld *= matBillboardY; //Y軸ビルボード行列を掛ける
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
 	// 親オブジェクトがあれば
