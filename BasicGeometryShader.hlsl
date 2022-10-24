@@ -1,9 +1,4 @@
-#includeÅ@"BasicShaderHeader.hlsl"
-
-struct GSOutput
-{
-	float4 pos : SV_POSITION;
-};
+#include "Resources/shaders/BasicShaderHeader.hlsli"
 
 [maxvertexcount(3)]
 void main(
