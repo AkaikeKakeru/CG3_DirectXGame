@@ -2,7 +2,7 @@
 
 [maxvertexcount(3)]
 void main(
-	triangle VSOutPut input[3] : SV_POSITION, 
+	triangle VSOutput input[3] : SV_POSITION, 
 	inout TriangleStream< GSOutput > output
 )
 {
