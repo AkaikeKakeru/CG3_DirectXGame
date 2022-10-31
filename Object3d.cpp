@@ -805,5 +805,6 @@ void Object3d::Draw()
 	// シェーダリソースビューをセット
 	cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
 	// 描画コマンド
-	cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
+	//cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
+	cmdList->DrawIndexedInstanced(3, 1, 0, 0, 0);
 }
