@@ -18,13 +18,12 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete spriteBG;
-	//delete object3d;
-	//delete object3d2;
+	delete object3d;
 
-	for (int i = 0; i < _countof(kusa); i++)
-	{
-		delete kusa[i];
-	}
+	//for (int i = 0; i < _countof(kusa); i++)
+	//{
+	//	delete kusa[i];
+	//}
 
 	//スプライトの解放
 	safe_delete(sprite1);
@@ -46,101 +45,83 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	debugText.Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	//Sprite::LoadTexture(1, L"Resources/background.png");
+	Sprite::LoadTexture(1, L"Resources/background.png");
 
 	////テクスチャ2番に読み込み
-	//Sprite::LoadTexture(2, L"Resources/texture.png");
+	Sprite::LoadTexture(2, L"Resources/texture.png");
 
 	//草用テクスチャをテクスチャ2番に読み込み
-	Sprite::LoadTexture(2, L"Resources/kusa.png");
+	//Sprite::LoadTexture(2, L"Resources/kusa.png");
 
 
 	//座標{0,0}に、テクスチャ2番のスプライトを生成
-	sprite1 = Sprite::Create(2, { 0,0 });
+	//sprite1 = Sprite::Create(2, { 0,0 });
 	//座標{500,500}に、テクスチャ2番のスプライトを生成
-	sprite2 = Sprite::Create(2, { 500,500 }, { 1,0,0,1 }, { 0,0 }, false, true);
+	//sprite2 = Sprite::Create(2, { 500,500 }, { 1,0,0,1 }, { 0,0 }, false, true);
 
 	// 背景スプライト生成
-	//spriteBG = Sprite::Create(1, { 0.0f,0.0f });
+	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	//object3d = Object3d::Create();
-	//object3d2 = Object3d::Create();
-	//object3d->Update();
-	//object3d2->Update();
+	object3d = Object3d::Create();
+	object3d->Update();
 
-	///乱数
-	//シード生成器
-	std::random_device seed_gen;
-	//乱数エンジン
-	std::mt19937_64 engine(seed_gen());
-	//範囲の指定
-	std::uniform_real_distribution<float> dist(-20,+20);
+	/////乱数
+	////シード生成器
+	//std::random_device seed_gen;
+	////乱数エンジン
+	//std::mt19937_64 engine(seed_gen());
+	////範囲の指定
+	//std::uniform_real_distribution<float> dist(-20,+20);
 
-	for (int i = 0; i < _countof(kusa); i++)
-	{
-		float valueX = dist(engine);
-		float valueZ = dist(engine);
+	//for (int i = 0; i < _countof(kusa); i++)
+	//{
+	//	float valueX = dist(engine);
+	//	float valueZ = dist(engine);
 
-		kusa[i] = Object3d::Create();
-		kusa[i]->SetPosition(
-			XMFLOAT3(valueX,0,valueZ)
-		);
-		kusa[i]->Update();
-	}
+	//	kusa[i] = Object3d::Create();
+	//	kusa[i]->SetPosition(
+	//		XMFLOAT3(valueX,0,valueZ)
+	//	);
+	//	kusa[i]->Update();
+	//}
 }
 
 void GameScene::Update()
 {
-	//// オブジェクト移動
-	//if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-	//{
-	//	// 現在の座標を取得
-	//	XMFLOAT3 position = object3d->GetPosition();
-
-	//	// 移動後の座標を計算
-	//	if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-	//	else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-	//	if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-	//	else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
-
-	//	// 座標の変更を反映
-	//	object3d->SetPosition(position);
-	//}
-
-	//// オブジェクト移動
-	//if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-	//{
-	//	// 現在の座標を取得
-	//	XMFLOAT3 position = object3d2->GetPosition();
-
-	//	// 移動後の座標を計算
-	//	if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-	//	else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-	//	if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-	//	else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
-
-	//	// 座標の変更を反映
-	//	object3d2->SetPosition(position);
-	//}
-
-	for (int i = 0; i < _countof(kusa); i++)
+	// オブジェクト移動
+	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 	{
-		// オブジェクト移動
-		if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-		{
-			// 現在の座標を取得
-			XMFLOAT3 position = kusa[i]->GetPosition();
+		// 現在の座標を取得
+		XMFLOAT3 position = object3d->GetPosition();
 
-			// 移動後の座標を計算
-			if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-			else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-			if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-			else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
+		// 移動後の座標を計算
+		if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
+		else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
+		if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
+		else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
 
-			// 座標の変更を反映
-			kusa[i]->SetPosition(position);
-		}
+		// 座標の変更を反映
+		object3d->SetPosition(position);
 	}
+
+	//for (int i = 0; i < _countof(kusa); i++)
+	//{
+	//	// オブジェクト移動
+	//	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
+	//	{
+	//		// 現在の座標を取得
+	//		XMFLOAT3 position = kusa[i]->GetPosition();
+
+	//		// 移動後の座標を計算
+	//		if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
+	//		else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
+	//		if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
+	//		else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
+
+	//		// 座標の変更を反映
+	//		kusa[i]->SetPosition(position);
+	//	}
+	//}
 
 	// カメラ移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
@@ -164,12 +145,12 @@ void GameScene::Update()
 		sprite1->SetPosition(position);
 	}
 
-	//object3d->Update();
-	//object3d2->Update();
-	for (int i = 0; i < _countof(kusa); i++)
-	{
-		kusa[i]->Update();
-	}
+	object3d->Update();
+	
+	//for (int i = 0; i < _countof(kusa); i++)
+	//{
+	//	kusa[i]->Update();
+	//}
 }
 
 void GameScene::Draw()
@@ -181,7 +162,7 @@ void GameScene::Draw()
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
 	// 背景スプライト描画
-	//spriteBG->Draw();
+	spriteBG->Draw();
 
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
@@ -198,13 +179,12 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	//object3d->Draw();
-	//object3d2->Draw();
+	object3d->Draw();
 
-	for (int i = 0; i < _countof(kusa); i++)
-	{
-		kusa[i]->Draw();
-	}
+	//for (int i = 0; i < _countof(kusa); i++)
+	//{
+	//	kusa[i]->Draw();
+	//}
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
