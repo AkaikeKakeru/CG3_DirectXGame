@@ -556,16 +556,25 @@ void Object3d::CreateModel()
 	//}
 	}
 
+	////四角形の頂点データ
+	//VertexPosNormalUv verticesSquare[] = {
+	//	{{-5.0f,-5.0f,0.0f},{0,0,1},{0,1}},//左下
+	//	{{-5.0f,+5.0f,0.0f},{0,0,1},{0,0}},//左上
+	//	{{+5.0f,-5.0f,0.0f},{0,0,1},{1,1}},//右下
+	//	{{+5.0f,+5.0f,0.0f},{0,0,1},{1,0}},//右上
+	//};
+
+	////メンバ変数にコピー
+	//std::copy(std::begin(verticesSquare), std::end(verticesSquare),
+	//	vertices);
+
 	//四角形の頂点データ
-	VertexPosNormalUv verticesSquare[] = {
-		{{-5.0f,-5.0f,0.0f},{0,0,1},{0,1}},//左下
-		{{-5.0f,+5.0f,0.0f},{0,0,1},{0,0}},//左上
-		{{+5.0f,-5.0f,0.0f},{0,0,1},{1,1}},//右下
-		{{+5.0f,+5.0f,0.0f},{0,0,1},{1,0}},//右上
+	VertexPosNormalUv verticesPoint[] = {
+		{{0.0f,0.0f,0.0f},{0,0,1},{0,1}},
 	};
 
 	//メンバ変数にコピー
-	std::copy(std::begin(verticesSquare), std::end(verticesSquare),
+	std::copy(std::begin(verticesPoint), std::end(verticesPoint),
 		vertices);
 
 	UINT sizeVB = static_cast<UINT>(sizeof(vertices));
