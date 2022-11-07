@@ -147,7 +147,8 @@ private: // 静的メンバ変数
 	static D3D12_VERTEX_BUFFER_VIEW vbView;
 
 	// 頂点データ配列
-	static VertexPosNormalUv vertices[vertexCount];
+	//static VertexPosNormalUv vertices[vertexCount];
+	static VertexPos vertices[vertexCount];
 
 	//ビルボード行列
 	static XMMATRIX matBillboard;

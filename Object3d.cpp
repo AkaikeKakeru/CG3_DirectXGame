@@ -29,7 +29,8 @@ XMFLOAT3 Object3d::target = { 0, 0, 0 };
 XMFLOAT3 Object3d::up = { 0, 1, 0 };
 D3D12_VERTEX_BUFFER_VIEW Object3d::vbView{};
 
-Object3d::VertexPosNormalUv Object3d::vertices[vertexCount];
+//Object3d::VertexPosNormalUv Object3d::vertices[vertexCount];
+Object3d::VertexPos Object3d::vertices[vertexCount];
 
 XMMATRIX Object3d::matBillboard = XMMatrixIdentity();
 XMMATRIX Object3d::matBillboardY = XMMatrixIdentity();
