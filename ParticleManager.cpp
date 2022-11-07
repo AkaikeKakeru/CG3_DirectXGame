@@ -426,14 +426,23 @@ void ParticleManager::CreateModel()
 {
 	HRESULT result = S_FALSE;
 
-	//四角形の頂点データ
-	VertexPos verticesPoint[] = {
-		{{0.0f,0.0f,0.0f}}
-	};
+	////四角形の頂点データ
+	//VertexPos verticesPoint[] = {
+	//	{{0.0f,0.0f,0.0f}}
+	//};
 
-	//メンバ変数にコピー
-	std::copy(std::begin(verticesPoint), std::end(verticesPoint),
-		vertices);
+	////メンバ変数にコピー
+	//std::copy(std::begin(verticesPoint), std::end(verticesPoint),
+	//	vertices);
+
+	for (int i = 0; i < vertexCount; i++){
+		//XYZ全て[-0.5f,+0.5f]でランダムに分布
+		const float rnd_width = 10.0f;
+
+		vertices[i].pos.x = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
+		vertices[i].pos.y = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
+		vertices[i].pos.z = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
+	}
 
 	UINT sizeVB = static_cast<UINT>(sizeof(vertices));
 
