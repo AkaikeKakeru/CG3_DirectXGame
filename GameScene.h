@@ -61,11 +61,9 @@ private: // メンバ変数
 	/// </summary>
 	Sprite* spriteBG = nullptr;
 	ParticleManager* object3d = nullptr;
-
 	//ParticleManager* kusa[50] = {};
 
 private: // メンバ変数
 	Sprite* sprite1 = nullptr;
 	Sprite* sprite2 = nullptr;
 };
-

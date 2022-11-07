@@ -1,6 +1,5 @@
 ﻿#include "GameScene.h"
 #include <cassert>
-
 #include<random>
 
 using namespace DirectX;
@@ -11,12 +10,10 @@ inline void safe_delete(T*& p) {
 	p = nullptr;
 }
 
-GameScene::GameScene()
-{
+GameScene::GameScene() {
 }
 
-GameScene::~GameScene()
-{
+GameScene::~GameScene() {
 	delete spriteBG;
 	delete object3d;
 
@@ -30,8 +27,7 @@ GameScene::~GameScene()
 	safe_delete(sprite2);
 }
 
-void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
-{
+void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	// nullptrチェック
 	assert(dxCommon);
 	assert(input);
@@ -73,8 +69,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	////範囲の指定
 	//std::uniform_real_distribution<float> dist(-20,+20);
 
-	//for (int i = 0; i < _countof(kusa); i++)
-	//{
+	//for (int i = 0; i < _countof(kusa); i++){
 	//	float valueX = dist(engine);
 	//	float valueZ = dist(engine);
 
@@ -86,8 +81,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	//}
 }
 
-void GameScene::Update()
-{
+void GameScene::Update() {
 	// オブジェクト移動
 	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 	{
@@ -104,11 +98,9 @@ void GameScene::Update()
 		//object3d->SetPosition(position);
 	}
 
-	//for (int i = 0; i < _countof(kusa); i++)
-	//{
+	//for (int i = 0; i < _countof(kusa); i++){
 	//	// オブジェクト移動
-	//	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-	//	{
+	//	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)){
 	//		// 現在の座標を取得
 	//		XMFLOAT3 position = kusa[i]->GetPosition();
 
@@ -124,8 +116,7 @@ void GameScene::Update()
 	//}
 
 	// カメラ移動
-	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
-	{
+	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A)) {
 		if (input->PushKey(DIK_W)) { ParticleManager::CameraMoveEyeVector({ 0.0f,+1.0f,0.0f }); }
 		else if (input->PushKey(DIK_S)) { ParticleManager::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
 		if (input->PushKey(DIK_D)) { ParticleManager::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
@@ -133,8 +124,7 @@ void GameScene::Update()
 	}
 
 	// オブジェクト移動
-	if (input->PushKey(DIK_SPACE))
-	{
+	if (input->PushKey(DIK_SPACE)) {
 		// 現在の座標を取得
 		XMFLOAT2 position = sprite1->GetPosition();
 
@@ -146,15 +136,13 @@ void GameScene::Update()
 	}
 
 	object3d->Update();
-	
-	//for (int i = 0; i < _countof(kusa); i++)
-	//{
+
+	//for (int i = 0; i < _countof(kusa); i++){
 	//	kusa[i]->Update();
 	//}
 }
 
-void GameScene::Draw()
-{
+void GameScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();
 
@@ -181,8 +169,7 @@ void GameScene::Draw()
 	// 3Dオブクジェクトの描画
 	object3d->Draw();
 
-	//for (int i = 0; i < _countof(kusa); i++)
-	//{
+	//for (int i = 0; i < _countof(kusa); i++){
 	//	kusa[i]->Draw();
 	//}
 
@@ -211,6 +198,4 @@ void GameScene::Draw()
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion
-
 }
-

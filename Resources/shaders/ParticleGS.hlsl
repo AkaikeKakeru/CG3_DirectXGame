@@ -21,10 +21,7 @@ static const float2 uv_array[vnum] = {
 
 //点の入力から、四角形を出力
 [maxvertexcount(vnum)]
-void main(
-	point VSOutput input[1] : SV_POSITION,
-	inout TriangleStream< GSOutput > output
-){
+void main(point VSOutput input[1] : SV_POSITION, inout TriangleStream< GSOutput > output) {
 	GSOutput element;
 
 	//4点分回す
@@ -35,7 +32,7 @@ void main(
 		element.svpos = input[0].pos + offset;
 
 		//ビュー、射影変換
-		element.svpos = mul(mat,element.svpos);
+		element.svpos = mul(mat, element.svpos);
 		element.uv = uv_array[i];
 
 		output.Append(element);
