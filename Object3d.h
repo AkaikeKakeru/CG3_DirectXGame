@@ -21,12 +21,18 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // サブクラス
+	//// 頂点データ構造体
+	//struct VertexPosNormalUv
+	//{
+	//	XMFLOAT3 pos; // xyz座標
+	//	XMFLOAT3 normal; // 法線ベクトル
+	//	XMFLOAT2 uv;  // uv座標
+	//};
+
 	// 頂点データ構造体
-	struct VertexPosNormalUv
+	struct VertexPos
 	{
 		XMFLOAT3 pos; // xyz座標
-		XMFLOAT3 normal; // 法線ベクトル
-		XMFLOAT2 uv;  // uv座標
 	};
 
 	// 定数バッファ用データ構造体
