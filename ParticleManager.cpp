@@ -605,7 +605,8 @@ void ParticleManager::Update()
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	// 行列の合成
-	constMap->mat = matView * matProjection;	
+	constMap->mat = matView * matProjection;
+	constMap->matBillboard = matBillboard;
 	constBuff->Unmap(0, nullptr);
 }
 

@@ -9,8 +9,7 @@
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
-class ParticleManager
-{
+class ParticleManager{
 private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -22,15 +21,14 @@ private: // エイリアス
 
 public: // サブクラス
 	// 頂点データ構造体
-	struct VertexPos
-	{
+	struct VertexPos{
 		XMFLOAT3 pos; // xyz座標
 	};
 
 	// 定数バッファ用データ構造体
-	struct ConstBufferData
-	{
+	struct ConstBufferData{
 		XMMATRIX mat;	// ３Ｄ変換行列
+		XMMATRIX matBillboard; //ビルボード行列
 	};
 
 private: // 定数
