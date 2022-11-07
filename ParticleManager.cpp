@@ -579,27 +579,27 @@ void ParticleManager::Update()
 
 	// スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
-	matRot = XMMatrixIdentity();
+	/*matRot = XMMatrixIdentity();
 	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
-	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
+	matTrans = XMMatrixTranslation(position.x, position.y, position.z);*/
 
 	// ワールド行列の合成
-	matWorld = XMMatrixIdentity(); // 変形をリセット
+	//matWorld = XMMatrixIdentity(); // 変形をリセット
 
 
-	matWorld *= matScale; // ワールド行列にスケーリングを反映
-	matWorld *= matRot; // ワールド行列に回転を反映
-						//matWorld *= matBillboard; //ビルボード行列を掛ける
-						//matWorld *= matBillboardY; //Y軸ビルボード行列を掛ける
-	matWorld *= matTrans; // ワールド行列に平行移動を反映
+	//matWorld *= matScale; // ワールド行列にスケーリングを反映
+	//matWorld *= matRot; // ワールド行列に回転を反映
+	//					//matWorld *= matBillboard; //ビルボード行列を掛ける
+	//					//matWorld *= matBillboardY; //Y軸ビルボード行列を掛ける
+	//matWorld *= matTrans; // ワールド行列に平行移動を反映
 
-						  // 親オブジェクトがあれば
-	if (parent != nullptr) {
-		// 親オブジェクトのワールド行列を掛ける
-		matWorld *= parent->matWorld;
-	}
+	//					  // 親オブジェクトがあれば
+	//if (parent != nullptr) {
+	//	// 親オブジェクトのワールド行列を掛ける
+	//	matWorld *= parent->matWorld;
+	//}
 
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
