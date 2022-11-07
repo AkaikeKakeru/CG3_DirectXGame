@@ -44,10 +44,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\shaders\BasicPixelShader.hlsl">
+    <FxCompile Include="Resources\shaders\PaerticlePixelShader.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\BasicVertexShader.hlsl">
+    <FxCompile Include="Resources\shaders\PaerticleVertexShader.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\SpritePixelShader.hlsl">
@@ -56,12 +56,12 @@
     <FxCompile Include="Resources\shaders\SpriteVertexShader.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\BasicGeometryShader.hlsl">
+    <FxCompile Include="Resources\shaders\PaerticleGeometryShader.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\shaders\BasicShaderHeader.hlsli">
+    <None Include="Resources\shaders\Paerticle.hlsli">
       <Filter>シェーダー ファイル</Filter>
     </None>
     <None Include="Resources\shaders\SpriteShaderHeader.hlsli">
