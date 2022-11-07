@@ -449,8 +449,9 @@ void Object3d::CreateModel()
 	//	vertices);
 
 	//四角形の頂点データ
-	VertexPosNormalUv verticesPoint[] = {
-		{{0.0f,0.0f,0.0f},{0,0,1},{0,1}},
+	VertexPos verticesPoint[] = {
+		/*{{0.0f,0.0f,0.0f},{0,0,1},{0,1}},*/
+		{{0.0f,0.0f,0.0f}}
 	};
 
 	//メンバ変数にコピー
@@ -471,7 +472,7 @@ void Object3d::CreateModel()
 	assert(SUCCEEDED(result));
 
 	// 頂点バッファへのデータ転送
-	VertexPosNormalUv* vertMap = nullptr;
+	VertexPos* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	if (SUCCEEDED(result)) {
 		memcpy(vertMap, vertices, sizeof(vertices));
