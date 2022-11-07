@@ -1,4 +1,4 @@
-#include "BasicShaderHeader.hlsli"
+#include "Paerticle.hlsli"
 
 VSOutput main(float4 pos : POSITION){
 	VSOutput output; // ピクセルシェーダーに渡す値
