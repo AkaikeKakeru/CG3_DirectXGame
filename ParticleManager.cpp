@@ -547,6 +547,18 @@ void ParticleManager::UpdateViewMatrix() {
 #pragma endregion
 }
 
+void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel){
+	//リストに要素を追加
+	particles.emplace_front();
+	//追加した要素の参照
+	Particle& p = particles.front();
+	//値のセット
+	p.position = position;
+	p.velocity = velocity;
+	p.accel = accel;
+	p.num_frame = life;
+}
+
 bool ParticleManager::Initialize() {
 	// nullptrチェック
 	assert(device);

@@ -160,6 +160,7 @@ private: // 静的メンバ変数
 	//Y軸回りビルボード行列
 	static XMMATRIX matBillboardY;
 
+public: //メンバ変数
 	//パーティクル配列
 	std::forward_list<Particle> particles;
 
@@ -196,6 +197,17 @@ private:// 静的メンバ関数
 	/// ビュー行列を更新
 	/// </summary>
 	static void UpdateViewMatrix();
+
+public: //メンバ関数
+
+	/// <summary>
+	/// パーティクルの追加
+	/// </summary>
+	/// <param name="life">生存時間</param>
+	/// <param name="position">初期座標</param>
+	/// <param name="velocity">速度</param>
+	/// <param name="accel">加速度</param>
+	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel);
 
 public: // メンバ関数
 	bool Initialize();
