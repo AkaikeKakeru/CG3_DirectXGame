@@ -31,6 +31,23 @@ public: // サブクラス
 		XMMATRIX matBillboard; //ビルボード行列
 	};
 
+	//パーティクル一粒
+	struct Particle{
+		//DirectX::省略
+		using XMFLOAT3 = DirectX::XMFLOAT3;
+
+		//座標
+		XMFLOAT3 position = {};
+		//速度
+		XMFLOAT3 velocity = {};
+		//加速度
+		XMFLOAT3 accel = {};
+		//現在フレーム
+		int frame = 0;
+		//終了フレーム
+		int num_frame = 0;
+	};
+
 private: // 定数
 	static const int division = 50;			// 分割数
 	static const float radius;				// 底面の半径
