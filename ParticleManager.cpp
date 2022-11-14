@@ -594,6 +594,13 @@ void ParticleManager::Update() {
 	HRESULT result;
 	XMMATRIX matScale;
 
+	//寿命が尽きたパーティクルを全削除
+	particles.remove_if(
+		[](Particle& x) {
+			return x.frame >= x.num_frame;
+		}
+	);
+
 	//全パーティクル更新
 	for (std::forward_list<Particle>::iterator it = particles.begin();
 		it != particles.end();
