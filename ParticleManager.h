@@ -25,6 +25,7 @@ public: // サブクラス
 	// 頂点データ構造体
 	struct VertexPos {
 		XMFLOAT3 pos; // xyz座標
+		float scale;//スケール
 	};
 
 	// 定数バッファ用データ構造体
