@@ -142,7 +142,6 @@ void ParticleManager::CameraMoveEyeVector(XMFLOAT3 move) {
 	SetEye(eye_moved);
 }
 
-
 void ParticleManager::InitializeDescriptorHeap() {
 	HRESULT result = S_FALSE;
 
@@ -293,13 +292,13 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;*/
 	//加算合成
-	/*blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_ONE;
-	blenddesc.DestBlend = D3D12_BLEND_ONE;*/
-	//減算合成
-	blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlend = D3D12_BLEND_ONE;
 	blenddesc.DestBlend = D3D12_BLEND_ONE;
+	//減算合成
+	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
+	//blenddesc.SrcBlend = D3D12_BLEND_ONE;
+	//blenddesc.DestBlend = D3D12_BLEND_ONE;
 
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -433,15 +432,6 @@ void ParticleManager::LoadTexture() {
 
 void ParticleManager::CreateModel() {
 	HRESULT result = S_FALSE;
-
-	//for (int i = 0; i < vertexCount; i++) {
-	//	//XYZ全て[-0.5f,+0.5f]でランダムに分布
-	//	const float rnd_width = 10.0f;
-
-	//	vertices[i].pos.x = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-	//	vertices[i].pos.y = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-	//	vertices[i].pos.z = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-	//}
 
 	UINT sizeVB = static_cast<UINT>(sizeof(vertices));
 
@@ -613,9 +603,6 @@ void ParticleManager::Update() {
 		it->position = it->position + it->velocity;
 	}
 
-	// スケール、回転、平行移動行列の計算
-	//matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
-
 	//頂点バッファへデータ転送
 	VertexPos* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
@@ -658,6 +645,5 @@ void ParticleManager::Draw() {
 	// シェーダリソースビューをセット
 	cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
 	// 描画コマンド
-	//cmdList->DrawInstanced(_countof(vertices), 1, 0, 0);
 	cmdList->DrawInstanced((UINT)std::distance(particles.begin(), particles.end()),1, 0, 0);
 }
