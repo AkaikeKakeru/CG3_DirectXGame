@@ -611,7 +611,7 @@ void ParticleManager::Update() {
 		//速度に加速度を加算
 		it->velocity = it->velocity + it->accel;
 		//速度による移動
-		it->position = it->position + it->velocity
+		it->position = it->position + it->velocity;
 	}
 
 	// スケール、回転、平行移動行列の計算
