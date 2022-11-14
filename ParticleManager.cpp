@@ -597,12 +597,14 @@ void ParticleManager::Update() {
 	//全パーティクル更新
 	for (std::forward_list<Particle>::iterator it = particles.begin();
 		it != particles.end();
-		it++) {
+		it++) 
+	{
 		//経過フレームをカウント
 		it->frame++;
 		//速度に加速度を加算
 		it->velocity = it->velocity + it->accel;
-		
+		//速度による移動
+		it->position = it->position + it->velocity
 	}
 
 	// スケール、回転、平行移動行列の計算
