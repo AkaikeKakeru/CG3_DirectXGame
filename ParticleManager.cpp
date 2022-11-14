@@ -7,6 +7,15 @@
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
+//XMFLOAT3同士の加算処理
+const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs) {
+	XMFLOAT3 result;
+	result.x = lhs.x + rhs.x;
+	result.y = lhs.y + rhs.y;
+	result.z = lhs.z + rhs.z;
+	return result;
+}
+
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
@@ -584,6 +593,17 @@ bool ParticleManager::Initialize() {
 void ParticleManager::Update() {
 	HRESULT result;
 	XMMATRIX matScale;
+
+	//全パーティクル更新
+	for (std::forward_list<Particle>::iterator it = particles.begin();
+		it != particles.end();
+		it++) {
+		//経過フレームをカウント
+		it->frame++;
+		//速度に加速度を加算
+		it->velocity = it->velocity + it->accel;
+		
+	}
 
 	// スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
