@@ -604,8 +604,7 @@ void ParticleManager::Update() {
 	//全パーティクル更新
 	for (std::forward_list<Particle>::iterator it = particles.begin();
 		it != particles.end();
-		it++) 
-	{
+		it++) {
 		//経過フレームをカウント
 		it->frame++;
 		//速度に加速度を加算
@@ -615,7 +614,23 @@ void ParticleManager::Update() {
 	}
 
 	// スケール、回転、平行移動行列の計算
-	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
+	//matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
+
+	//頂点バッファへデータ転送
+	VertexPos* vertMap = nullptr;
+	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
+	if (SUCCEEDED(result)) {
+		//パーティクルの情報を一つずつ反映
+		for (std::forward_list<Particle> ::iterator it = particles.begin();
+			it != particles.end();
+			it++){
+			//座標
+			vertMap->pos = it->position;
+			//次の頂点へ
+			vertMap++;
+		}
+		vertBuff->Unmap(0, nullptr);
+	}
 
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
