@@ -425,14 +425,14 @@ void ParticleManager::LoadTexture() {
 void ParticleManager::CreateModel() {
 	HRESULT result = S_FALSE;
 
-	for (int i = 0; i < vertexCount; i++) {
-		//XYZ全て[-0.5f,+0.5f]でランダムに分布
-		const float rnd_width = 10.0f;
+	//for (int i = 0; i < vertexCount; i++) {
+	//	//XYZ全て[-0.5f,+0.5f]でランダムに分布
+	//	const float rnd_width = 10.0f;
 
-		vertices[i].pos.x = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-		vertices[i].pos.y = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-		vertices[i].pos.z = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-	}
+	//	vertices[i].pos.x = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
+	//	vertices[i].pos.y = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
+	//	vertices[i].pos.z = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
+	//}
 
 	UINT sizeVB = static_cast<UINT>(sizeof(vertices));
 
