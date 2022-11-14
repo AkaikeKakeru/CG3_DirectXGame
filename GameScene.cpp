@@ -10,6 +10,15 @@ inline void safe_delete(T*& p) {
 	p = nullptr;
 }
 
+//XMFLOAT3同士の加算処理
+const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs) {
+	XMFLOAT3 result;
+	result.x = lhs.x + rhs.x;
+	result.y = lhs.y + rhs.y;
+	result.z = lhs.z + rhs.z;
+	return result;
+}
+
 GameScene::GameScene() {
 }
 
