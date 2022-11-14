@@ -279,9 +279,14 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
 	blenddesc.BlendEnable = true;
+	////半透明合成
+	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	//加算合成
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blenddesc.SrcBlend = D3D12_BLEND_ONE;
+	blenddesc.DestBlend = D3D12_BLEND_ONE;
 
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -344,7 +349,8 @@ void ParticleManager::LoadTexture() {
 	ScratchImage scratchImg{};
 
 	// WICテクスチャのロード
-	result = LoadFromWICFile(L"Resources/smile.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	result = LoadFromWICFile(L"Resources/particle.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	//result = LoadFromWICFile(L"Resources/smile.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	//result = LoadFromWICFile( L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	//result = LoadFromWICFile( L"Resources/kusa.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	assert(SUCCEEDED(result));
