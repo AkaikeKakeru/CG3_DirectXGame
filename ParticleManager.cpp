@@ -266,6 +266,12 @@ void ParticleManager::InitializeGraphicsPipeline() {
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		},
+		{//スケール
+			"TEXCOORD", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+
+		}
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -546,7 +552,7 @@ void ParticleManager::UpdateViewMatrix() {
 #pragma endregion
 }
 
-void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel){
+void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel) {
 	//リストに要素を追加
 	particles.emplace_front();
 	//追加した要素の参照
@@ -610,7 +616,7 @@ void ParticleManager::Update() {
 		//パーティクルの情報を一つずつ反映
 		for (std::forward_list<Particle> ::iterator it = particles.begin();
 			it != particles.end();
-			it++){
+			it++) {
 			//座標
 			vertMap->pos = it->position;
 			//次の頂点へ
@@ -645,5 +651,5 @@ void ParticleManager::Draw() {
 	// シェーダリソースビューをセット
 	cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
 	// 描画コマンド
-	cmdList->DrawInstanced((UINT)std::distance(particles.begin(), particles.end()),1, 0, 0);
+	cmdList->DrawInstanced((UINT)std::distance(particles.begin(), particles.end()), 1, 0, 0);
 }
