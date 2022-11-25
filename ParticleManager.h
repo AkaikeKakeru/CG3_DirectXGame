@@ -216,7 +216,8 @@ public: //メンバ関数
 	/// <param name="position">初期座標</param>
 	/// <param name="velocity">速度</param>
 	/// <param name="accel">加速度</param>
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel);
+	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
+		float start_scale,float end_scale);
 
 public: // メンバ関数
 	bool Initialize();

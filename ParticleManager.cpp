@@ -552,7 +552,7 @@ void ParticleManager::UpdateViewMatrix() {
 #pragma endregion
 }
 
-void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel) {
+void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,float start_scale,float end_scale) {
 	//リストに要素を追加
 	particles.emplace_front();
 	//追加した要素の参照
