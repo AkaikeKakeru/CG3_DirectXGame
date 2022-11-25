@@ -39,6 +39,14 @@ public: // サブクラス
 		//DirectX::省略
 		using XMFLOAT3 = DirectX::XMFLOAT3;
 
+		//スケール
+		float scale = 1.0f;
+		//スケール初期値
+		float s_scale = 1.0f;
+		//スケール最終値
+		float e_scale = 0.0f;
+
+
 		//座標
 		XMFLOAT3 position = {};
 		//速度
