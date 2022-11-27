@@ -7,6 +7,24 @@
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
+//XMFLOAT3同士の加算処理
+const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs) {
+	XMFLOAT3 result;
+	result.x = lhs.x + rhs.x;
+	result.y = lhs.y + rhs.y;
+	result.z = lhs.z + rhs.z;
+	return result;
+}
+
+//XMFLOAT4同士の加算処理
+const DirectX::XMFLOAT4 operator-(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs) {
+	XMFLOAT4 result;
+	result.x = lhs.x - rhs.x;
+	result.y = lhs.y - rhs.y;
+	result.z = lhs.z - rhs.z;
+	return result;
+}
+
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
@@ -133,7 +151,6 @@ void ParticleManager::CameraMoveEyeVector(XMFLOAT3 move) {
 	SetEye(eye_moved);
 }
 
-
 void ParticleManager::InitializeDescriptorHeap() {
 	HRESULT result = S_FALSE;
 
@@ -182,7 +199,7 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
 
-	// 頂点シェーダの読み込みとコンパイル
+								// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
 		L"Resources/Shaders/ParticleVS.hlsl",	// シェーダファイル名
 		nullptr,
@@ -258,6 +275,17 @@ void ParticleManager::InitializeGraphicsPipeline() {
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		},
+		{//スケール
+			"SCALE", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+
+		},
+		{ // 色
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -279,13 +307,25 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
 	blenddesc.BlendEnable = true;
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	//半透明合成
+	/*blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;*/
+	//加算合成
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_ONE;
+	blenddesc.DestBlend = D3D12_BLEND_ONE;
+	//減算合成
+	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
+	//blenddesc.SrcBlend = D3D12_BLEND_ONE;
+	//blenddesc.DestBlend = D3D12_BLEND_ONE;
 
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+
+	//デプスの書き込みを禁止
+	gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
@@ -304,14 +344,14 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
-	//AlphaToCoverageEnableを有効化
+									//AlphaToCoverageEnableを有効化
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 
 	// デスクリプタレンジ
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
-	// ルートパラメータ
+															  // ルートパラメータ
 	CD3DX12_ROOT_PARAMETER rootparams[2] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
@@ -344,7 +384,8 @@ void ParticleManager::LoadTexture() {
 	ScratchImage scratchImg{};
 
 	// WICテクスチャのロード
-	result = LoadFromWICFile(L"Resources/smile.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	result = LoadFromWICFile(L"Resources/particle.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	//result = LoadFromWICFile(L"Resources/smile.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	//result = LoadFromWICFile( L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	//result = LoadFromWICFile( L"Resources/kusa.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	assert(SUCCEEDED(result));
@@ -411,15 +452,6 @@ void ParticleManager::LoadTexture() {
 
 void ParticleManager::CreateModel() {
 	HRESULT result = S_FALSE;
-
-	for (int i = 0; i < vertexCount; i++) {
-		//XYZ全て[-0.5f,+0.5f]でランダムに分布
-		const float rnd_width = 10.0f;
-
-		vertices[i].pos.x = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-		vertices[i].pos.y = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-		vertices[i].pos.z = (float)rand() / RAND_MAX * rnd_width - rnd_width / 2.0f;
-	}
 
 	UINT sizeVB = static_cast<UINT>(sizeof(vertices));
 
@@ -500,7 +532,7 @@ void ParticleManager::UpdateViewMatrix() {
 	XMVECTOR tX = XMVector3Dot(cameraAxisX, reverseEyePosition); //X成分
 	XMVECTOR tY = XMVector3Dot(cameraAxisY, reverseEyePosition); //Y成分
 	XMVECTOR tZ = XMVector3Dot(cameraAxisZ, reverseEyePosition); //Z成分
-																//一つのベクトルにまとめる
+																 //一つのベクトルにまとめる
 	XMVECTOR translation = XMVectorSet(tX.m128_f32[0], tY.m128_f32[1], tZ.m128_f32[2], 1.0f);
 
 	//ビュー行列に平行移動成分を設定
@@ -534,6 +566,29 @@ void ParticleManager::UpdateViewMatrix() {
 #pragma endregion
 }
 
+void ParticleManager::Add(int life, 
+	XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
+	float start_scale,float end_scale,
+	XMFLOAT4 start_color, XMFLOAT4 end_color){
+	//リストに要素を追加
+	particles.emplace_front();
+	//追加した要素の参照
+	Particle& p = particles.front();
+	//値のセット
+	p.position = position;
+	p.velocity = velocity;
+	p.accel = accel;
+	p.num_frame = life;
+
+	p.s_scale = start_scale;
+	p.e_scale = end_scale;
+	p.scale = p.s_scale;
+
+	p.s_color = start_color;
+	p.e_color = end_color;
+	p.s_color = start_color;
+}
+
 bool ParticleManager::Initialize() {
 	// nullptrチェック
 	assert(device);
@@ -560,8 +615,62 @@ void ParticleManager::Update() {
 	HRESULT result;
 	XMMATRIX matScale;
 
-	// スケール、回転、平行移動行列の計算
-	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
+	//寿命が尽きたパーティクルを全削除
+	particles.remove_if(
+		[](Particle& x) {
+			return x.frame >= x.num_frame;
+		}
+	);
+
+	//全パーティクル更新
+	for (std::forward_list<Particle>::iterator it = particles.begin();
+		it != particles.end();
+		it++) {
+		//経過フレームをカウント
+		it->frame++;
+
+		//速度に加速度を加算
+		it->velocity = it->velocity + it->accel;
+		//速度による移動
+		it->position = it->position + it->velocity;
+
+		//進行度を0～1の範囲に変換
+		float f = (float)it->frame / it->num_frame;
+		//スケールの線形補間
+		it->scale = (it->e_scale - it->s_scale) * f;
+		it->scale += it->s_scale;
+
+		//色の線形補間
+		it->color.x = (it->e_color.x - it->s_color.x) * f;
+		it->color.y = (it->e_color.y - it->s_color.y) * f;
+		it->color.z = (it->e_color.z - it->s_color.z) * f;
+		it->color.w = 1.0f;// (it->e_color.w - it->s_color.w)* f;
+
+		it->color.x += it->s_color.x;
+		it->color.y += it->s_color.y;
+		it->color.z += it->s_color.z;
+		//it->color.w += it->s_color.w;
+	}
+
+	//頂点バッファへデータ転送
+	VertexPos* vertMap = nullptr;
+	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
+	if (SUCCEEDED(result)) {
+		//パーティクルの情報を一つずつ反映
+		for (std::forward_list<Particle> ::iterator it = particles.begin();
+			it != particles.end();
+			it++) {
+			//座標
+			vertMap->pos = it->position;
+			//スケール
+			vertMap->scale = it->scale;
+			//色
+			vertMap->color = it->color;
+			//次の頂点へ
+			vertMap++;
+		}
+		vertBuff->Unmap(0, nullptr);
+	}
 
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
@@ -589,5 +698,5 @@ void ParticleManager::Draw() {
 	// シェーダリソースビューをセット
 	cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
 	// 描画コマンド
-	cmdList->DrawInstanced(_countof(vertices), 1, 0, 0);
+	cmdList->DrawInstanced((UINT)std::distance(particles.begin(), particles.end()), 1, 0, 0);
 }
