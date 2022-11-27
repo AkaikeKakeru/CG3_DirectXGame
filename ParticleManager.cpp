@@ -16,6 +16,15 @@ const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::X
 	return result;
 }
 
+//XMFLOAT4同士の加算処理
+const DirectX::XMFLOAT4 operator-(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs) {
+	XMFLOAT4 result;
+	result.x = lhs.x - rhs.x;
+	result.y = lhs.y - rhs.y;
+	result.z = lhs.z - rhs.z;
+	return result;
+}
+
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
@@ -267,11 +276,16 @@ void ParticleManager::InitializeGraphicsPipeline() {
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		},
 		{//スケール
-			"TEXCOORD", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			"SCALE", 0, DXGI_FORMAT_R32_FLOAT, 0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 
-		}
+		},
+		{ // 色
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+				D3D12_APPEND_ALIGNED_ELEMENT,
+				D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -552,7 +566,10 @@ void ParticleManager::UpdateViewMatrix() {
 #pragma endregion
 }
 
-void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,float start_scale,float end_scale) {
+void ParticleManager::Add(int life, 
+	XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
+	float start_scale,float end_scale,
+	XMFLOAT4 start_color, XMFLOAT4 end_color){
 	//リストに要素を追加
 	particles.emplace_front();
 	//追加した要素の参照
@@ -562,6 +579,14 @@ void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 	p.velocity = velocity;
 	p.accel = accel;
 	p.num_frame = life;
+
+	p.s_scale = start_scale;
+	p.e_scale = end_scale;
+	p.scale = p.s_scale;
+
+	p.s_color = start_color;
+	p.e_color = end_color;
+	p.s_color = start_color;
 }
 
 bool ParticleManager::Initialize() {
@@ -604,16 +629,27 @@ void ParticleManager::Update() {
 		//経過フレームをカウント
 		it->frame++;
 
+		//速度に加速度を加算
+		it->velocity = it->velocity + it->accel;
+		//速度による移動
+		it->position = it->position + it->velocity;
+
 		//進行度を0～1の範囲に変換
 		float f = (float)it->frame / it->num_frame;
 		//スケールの線形補間
 		it->scale = (it->e_scale - it->s_scale) * f;
 		it->scale += it->s_scale;
 
-		//速度に加速度を加算
-		it->velocity = it->velocity + it->accel;
-		//速度による移動
-		it->position = it->position + it->velocity;
+		//色の線形補間
+		it->color.x = (it->e_color.x - it->s_color.x) * f;
+		it->color.y = (it->e_color.y - it->s_color.y) * f;
+		it->color.z = (it->e_color.z - it->s_color.z) * f;
+		it->color.w = 1.0f;// (it->e_color.w - it->s_color.w)* f;
+
+		it->color.x += it->s_color.x;
+		it->color.y += it->s_color.y;
+		it->color.z += it->s_color.z;
+		//it->color.w += it->s_color.w;
 	}
 
 	//頂点バッファへデータ転送
@@ -628,6 +664,8 @@ void ParticleManager::Update() {
 			vertMap->pos = it->position;
 			//スケール
 			vertMap->scale = it->scale;
+			//色
+			vertMap->color = it->color;
 			//次の頂点へ
 			vertMap++;
 		}

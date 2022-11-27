@@ -25,19 +25,28 @@ public: // サブクラス
 	// 頂点データ構造体
 	struct VertexPos {
 		XMFLOAT3 pos; // xyz座標
-		float scale;//スケール
+		float scale; //スケール
+		XMFLOAT4 color; //色
 	};
 
 	// 定数バッファ用データ構造体
 	struct ConstBufferData {
 		XMMATRIX mat;	// ３Ｄ変換行列
 		XMMATRIX matBillboard; //ビルボード行列
+		XMFLOAT4 color; //色
 	};
 
 	//パーティクル一粒
 	struct Particle{
 		//DirectX::省略
 		using XMFLOAT3 = DirectX::XMFLOAT3;
+
+		//座標
+		XMFLOAT3 position = {};
+		//速度
+		XMFLOAT3 velocity = {};
+		//加速度
+		XMFLOAT3 accel = {};
 
 		//スケール
 		float scale = 1.0f;
@@ -46,13 +55,13 @@ public: // サブクラス
 		//スケール最終値
 		float e_scale = 0.0f;
 
+		//色
+		XMFLOAT4 color = {};
+		//色初期値
+		XMFLOAT4 s_color = {};
+		//色最終値
+		XMFLOAT4 e_color = {};
 
-		//座標
-		XMFLOAT3 position = {};
-		//速度
-		XMFLOAT3 velocity = {};
-		//加速度
-		XMFLOAT3 accel = {};
 		//現在フレーム
 		int frame = 0;
 		//終了フレーム
@@ -216,8 +225,14 @@ public: //メンバ関数
 	/// <param name="position">初期座標</param>
 	/// <param name="velocity">速度</param>
 	/// <param name="accel">加速度</param>
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
-		float start_scale,float end_scale);
+	/// <param name="start_scale">開始時スケール</param>
+	/// <param name="end_scale">終了時スケール</param>
+	/// <param name="start_color">開始時色</param>
+	/// <param name="end_color">終了時色</param>
+	void Add(int life, 
+		XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
+		float start_scale,float end_scale,
+		XMFLOAT4 start_color, XMFLOAT4 end_color);
 
 public: // メンバ関数
 	bool Initialize();

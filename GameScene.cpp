@@ -132,12 +132,34 @@ void GameScene::Update() {
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
 			//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-			XMFLOAT3 acc{};
 			const float rnd_acc = 0.001f;
+			XMFLOAT3 acc{};
 			acc.y = -(float)rand() / RAND_MAX * rnd_acc;
 
+			//[1.0f,2.0f]で分布
+			const float rnd_scale = 1.0f;
+			float s_scale = 0.0f;
+			s_scale = (float)rand() / RAND_MAX  * rnd_scale + rnd_scale;
+
+			//全て、[64.0f,192.0f]で分布
+			const float rnd_color = 256.0f;
+			XMFLOAT4 s_color, e_color = {};
+			s_color.x = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			s_color.y = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			s_color.z = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			//s_color.w = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			s_color.w = 1.0f;
+			e_color.x = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			e_color.y = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			e_color.z = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			//e_color.w = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			e_color.w = 1.0f;
+
 			//追加
-			particleMan->Add(60, pos, vel, acc,1.0f,0.0f);
+			particleMan->Add(60,
+				pos, vel, acc,
+				s_scale,0.0f,
+				s_color,e_color);
 		}
 	}
 

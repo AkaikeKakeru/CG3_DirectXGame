@@ -38,6 +38,7 @@ void main(point VSOutput input[1] : SV_POSITION, inout TriangleStream< GSOutput 
 		//ƒrƒ…[AŽË‰e•ÏŠ·
 		element.svpos = mul(mat, element.svpos);
 		element.uv = uv_array[i];
+		element.color = input[0].color;
 
 		output.Append(element);
 	}
