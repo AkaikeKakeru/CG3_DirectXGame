@@ -15,7 +15,7 @@ GameScene::GameScene() {
 
 GameScene::~GameScene() {
 	delete spriteBG;
-	delete object3d;
+	delete particleMan;
 
 	//for (int i = 0; i < _countof(kusa); i++)
 	//{
@@ -58,8 +58,33 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	object3d = ParticleManager::Create();
-	object3d->Update();
+	particleMan = ParticleManager::Create();
+
+	//for (int i = 0; i < 100; i++){
+	//	//X,Y,Z全て[-5.0f,+5,0f]でランダムに分布
+	//	const float rnd_pos = 10.0f;
+	//	XMFLOAT3 pos{};
+	//	pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	//	pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	//	pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+	//	//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+	//	const float rnd_vel = 0.1f;
+	//	XMFLOAT3 vel{};
+	//	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	//	vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	//	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+	//	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+	//	XMFLOAT3 acc{};
+	//	const float rnd_acc = 0.001f;
+	//	acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+	//	//追加
+	//	particleMan->Add(60, pos, vel, acc);
+	//}
+
+	particleMan->Update();
 
 	/////乱数
 	////シード生成器
@@ -82,6 +107,62 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 }
 
 void GameScene::Update() {
+	if (particleNum >= 100) {
+		particleNum = 0;
+	}
+
+	particleNum++;
+
+	for (int i = 0; i < 100; i++){
+
+		if (i == particleNum) {
+
+			//X,Y,Z全て[-5.0f,+5,0f]でランダムに分布
+			const float rnd_pos = 10.0f;
+			XMFLOAT3 pos{};
+			pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+			//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+			const float rnd_vel = 0.1f;
+			XMFLOAT3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+			//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+			const float rnd_acc = 0.001f;
+			XMFLOAT3 acc{};
+			acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+			//[1.0f,2.0f]で分布
+			const float rnd_scale = 1.0f;
+			float s_scale = 0.0f;
+			s_scale = (float)rand() / RAND_MAX  * rnd_scale + rnd_scale;
+
+			//全て、[64.0f,192.0f]で分布
+			const float rnd_color = 256.0f;
+			XMFLOAT4 s_color, e_color = {};
+			s_color.x = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			s_color.y = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			s_color.z = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			//s_color.w = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			s_color.w = 1.0f;
+			e_color.x = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			e_color.y = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			e_color.z = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			//e_color.w = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
+			e_color.w = 1.0f;
+
+			//追加
+			particleMan->Add(60,
+				pos, vel, acc,
+				s_scale,0.0f,
+				s_color,e_color);
+		}
+	}
+
 	// オブジェクト移動
 	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 	{
@@ -135,7 +216,7 @@ void GameScene::Update() {
 		sprite1->SetPosition(position);
 	}
 
-	object3d->Update();
+	particleMan->Update();
 
 	//for (int i = 0; i < _countof(kusa); i++){
 	//	kusa[i]->Update();
@@ -167,7 +248,7 @@ void GameScene::Draw() {
 	ParticleManager::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	object3d->Draw();
+	particleMan->Draw();
 
 	//for (int i = 0; i < _countof(kusa); i++){
 	//	kusa[i]->Draw();

@@ -26,14 +26,19 @@ void main(point VSOutput input[1] : SV_POSITION, inout TriangleStream< GSOutput 
 
 	//4点分回す
 	for (uint i = 0; i < vnum; i++) {
+		float4 offset;
+
+		//中心からのオフセットをスケーリング
+		offset = offset_array[i] * input[0].scale;
 		//中心からのオフセットをビルボード回転 (モデル座標)
-		float4 offset = mul(matBillboard, offset_array[i]);
+		offset = mul(matBillboard,offset);
+
 		//オフセット分ずらす(ワールド座標)
 		element.svpos = input[0].pos + offset;
-
 		//ビュー、射影変換
 		element.svpos = mul(mat, element.svpos);
 		element.uv = uv_array[i];
+		element.color = input[0].color;
 
 		output.Append(element);
 	}
