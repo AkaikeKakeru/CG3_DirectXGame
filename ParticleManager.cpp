@@ -626,6 +626,8 @@ void ParticleManager::Update() {
 			it++) {
 			//座標
 			vertMap->pos = it->position;
+			//スケール
+			vertMap->scale = it->scale;
 			//次の頂点へ
 			vertMap++;
 		}
