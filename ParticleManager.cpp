@@ -603,6 +603,13 @@ void ParticleManager::Update() {
 		it++) {
 		//経過フレームをカウント
 		it->frame++;
+
+		//進行度を0～1の範囲に変換
+		float f = (float)it->frame / it->num_frame;
+		//スケールの線形補間
+		it->scale = (it->e_scale - it->s_scale) * f;
+		it->scale += it->s_scale;
+
 		//速度に加速度を加算
 		it->velocity = it->velocity + it->accel;
 		//速度による移動
