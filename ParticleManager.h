@@ -6,12 +6,14 @@
 #include <DirectXMath.h>
 #include <d3dx12.h>
 
+#include <forward_list>
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
 class ParticleManager {
 private: // エイリアス
-	// Microsoft::WRL::を省略
+		 // Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -20,15 +22,50 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // サブクラス
-	// 頂点データ構造体
+		// 頂点データ構造体
 	struct VertexPos {
 		XMFLOAT3 pos; // xyz座標
+		float scale; //スケール
+		XMFLOAT4 color; //色
 	};
 
 	// 定数バッファ用データ構造体
 	struct ConstBufferData {
 		XMMATRIX mat;	// ３Ｄ変換行列
 		XMMATRIX matBillboard; //ビルボード行列
+		XMFLOAT4 color; //色
+	};
+
+	//パーティクル一粒
+	struct Particle{
+		//DirectX::省略
+		using XMFLOAT3 = DirectX::XMFLOAT3;
+
+		//座標
+		XMFLOAT3 position = {};
+		//速度
+		XMFLOAT3 velocity = {};
+		//加速度
+		XMFLOAT3 accel = {};
+
+		//スケール
+		float scale = 1.0f;
+		//スケール初期値
+		float s_scale = 1.0f;
+		//スケール最終値
+		float e_scale = 0.0f;
+
+		//色
+		XMFLOAT4 color = {};
+		//色初期値
+		XMFLOAT4 s_color = {};
+		//色最終値
+		XMFLOAT4 e_color = {};
+
+		//現在フレーム
+		int frame = 0;
+		//終了フレーム
+		int num_frame = 0;
 	};
 
 private: // 定数
@@ -36,15 +73,16 @@ private: // 定数
 	static const float radius;				// 底面の半径
 	static const float prizmHeight;			// 柱の高さ
 	static const int planeCount = division * 2 + division * 2;		// 面の数
-	static const int vertexCount = 30;		// 頂点数
+																	//static const int vertexCount = 30;		// 頂点数
+	static const int vertexCount = 1024;		// 頂点数
 
 public: // 静的メンバ関数
-	/// <summary>
-	/// 静的初期化
-	/// </summary>
-	/// <param name="device">デバイス</param>
-	/// <param name="window_width">画面幅</param>
-	/// <param name="window_height">画面高さ</param>
+		/// <summary>
+		/// 静的初期化
+		/// </summary>
+		/// <param name="device">デバイス</param>
+		/// <param name="window_width">画面幅</param>
+		/// <param name="window_height">画面高さ</param>
 	static void StaticInitialize(ID3D12Device* device, int window_width, int window_height);
 
 	/// <summary>
@@ -101,7 +139,7 @@ public: // 静的メンバ関数
 	static void CameraMoveEyeVector(XMFLOAT3 move);
 
 private: // 静的メンバ変数
-	// デバイス
+		 // デバイス
 	static ID3D12Device* device;
 	// デスクリプタサイズ
 	static UINT descriptorHandleIncrementSize;
@@ -140,10 +178,14 @@ private: // 静的メンバ変数
 	//Y軸回りビルボード行列
 	static XMMATRIX matBillboardY;
 
+public: //メンバ変数
+		//パーティクル配列
+	std::forward_list<Particle> particles;
+
 private:// 静的メンバ関数
-	/// <summary>
-	/// デスクリプタヒープの初期化
-	/// </summary>
+		/// <summary>
+		/// デスクリプタヒープの初期化
+		/// </summary>
 	static void InitializeDescriptorHeap();
 
 	/// <summary>
@@ -174,6 +216,24 @@ private:// 静的メンバ関数
 	/// </summary>
 	static void UpdateViewMatrix();
 
+public: //メンバ関数
+
+		/// <summary>
+		/// パーティクルの追加
+		/// </summary>
+		/// <param name="life">生存時間</param>
+		/// <param name="position">初期座標</param>
+		/// <param name="velocity">速度</param>
+		/// <param name="accel">加速度</param>
+		/// <param name="start_scale">開始時スケール</param>
+		/// <param name="end_scale">終了時スケール</param>
+		/// <param name="start_color">開始時色</param>
+		/// <param name="end_color">終了時色</param>
+	void Add(int life, 
+		XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
+		float start_scale,float end_scale,
+		XMFLOAT4 start_color, XMFLOAT4 end_color);
+
 public: // メンバ関数
 	bool Initialize();
 	/// <summary>
@@ -188,6 +248,6 @@ public: // メンバ関数
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
-	// ローカルスケール
+									  // ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 };
