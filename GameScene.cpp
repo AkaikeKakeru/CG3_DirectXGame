@@ -2,6 +2,9 @@
 #include <cassert>
 #include<random>
 
+#include "Vector3.h"
+#include "Vector4.h"
+
 using namespace DirectX;
 
 template <class T>
