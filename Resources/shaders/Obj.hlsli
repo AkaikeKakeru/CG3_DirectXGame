@@ -1,17 +1,18 @@
 cbuffer cbuff0 : register(b0) {
-	matrix mat; //3D�ϊ��s��
+	matrix mat; //3D変換行列
 };
 
 cbuffer cbuff1 : register(b1) {
-	float3 m_ambient : packoffset(c0); //�A���r�G���g�W��
-	float3 m_diffuse : packoffset(c1); //�f�B�t���[�Y�W��
-	float3 m_specular : packoffset(c2); //�X�y�L�����[�W��
-	float m_alpha : packoffset(c2.w); //�A���t�@
+	float3 m_ambient : packoffset(c0); //アンビエント
+	float3 m_diffuse : packoffset(c1); //ディヒューズ
+	float3 m_specular : packoffset(c2); //スペキュラー
+	float m_alpha : packoffset(c2.w); //アルファ
 }
 
-//���_�V�F�[�_�[����s�N�Z���V�F�[�_�[�ւ̂����Ɏg�p����\����
+//頂点シェーダからピクセルシェーダへの出力
 struct VSOutput {
-	float4 svpos : SV_POSITION; //�V�X�e���p���_���W
-	float3 normal : NORMAL; //�@���x�N�g��
-	float2 uv : TEXCOORD; //uv�l
+	float4 svpos : SV_POSITION; //システム用頂点座標
+	//float3 normal : NORMAL; //法線ベクトル
+	float4 color : COLOR;//色
+	float2 uv : TEXCOORD; //uv値
 };
