@@ -17,17 +17,13 @@ GameScene::GameScene() {
 }
 
 GameScene::~GameScene() {
-	delete spriteBG;
-	delete particleMan;
-
-	//for (int i = 0; i < _countof(kusa); i++)
-	//{
-	//	delete kusa[i];
-	//}
+	safe_delete( spriteBG);
+	safe_delete( obj_1);
+	safe_delete( model_1);
 
 	//スプライトの解放
-	safe_delete(sprite1);
-	safe_delete(sprite2);
+	//safe_delete(sprite1);
+	//safe_delete(sprite2);
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
@@ -47,157 +43,32 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	Sprite::LoadTexture(1, L"Resources/background.png");
 
 	////テクスチャ2番に読み込み
-	Sprite::LoadTexture(2, L"Resources/texture.png");
-
-	//草用テクスチャをテクスチャ2番に読み込み
-	//Sprite::LoadTexture(2, L"Resources/kusa.png");
-
-
-	//座標{0,0}に、テクスチャ2番のスプライトを生成
-	//sprite1 = Sprite::Create(2, { 0,0 });
-	//座標{500,500}に、テクスチャ2番のスプライトを生成
-	//sprite2 = Sprite::Create(2, { 500,500 }, { 1,0,0,1 }, { 0,0 }, false, true);
+	//Sprite::LoadTexture(2, L"Resources/texture.png");
 
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	particleMan = ParticleManager::Create();
-
-	//for (int i = 0; i < 100; i++){
-	//	//X,Y,Z全て[-5.0f,+5,0f]でランダムに分布
-	//	const float rnd_pos = 10.0f;
-	//	XMFLOAT3 pos{};
-	//	pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-	//	pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-	//	pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-
-	//	//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-	//	const float rnd_vel = 0.1f;
-	//	XMFLOAT3 vel{};
-	//	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//	vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-	//	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-	//	XMFLOAT3 acc{};
-	//	const float rnd_acc = 0.001f;
-	//	acc.y = -(float)rand() / RAND_MAX * rnd_acc;
-
-	//	//追加
-	//	particleMan->Add(60, pos, vel, acc);
-	//}
-
-	particleMan->Update();
-
-	/////乱数
-	////シード生成器
-	//std::random_device seed_gen;
-	////乱数エンジン
-	//std::mt19937_64 engine(seed_gen());
-	////範囲の指定
-	//std::uniform_real_distribution<float> dist(-20,+20);
-
-	//for (int i = 0; i < _countof(kusa); i++){
-	//	float valueX = dist(engine);
-	//	float valueZ = dist(engine);
-
-	//	kusa[i] = ParticleManager::Create();
-	//	kusa[i]->SetPosition(
-	//		XMFLOAT3(valueX,0,valueZ)
-	//	);
-	//	kusa[i]->Update();
-	//}
+	model_1 = Model::LoadFromOBJ("sphere");
+	obj_1 = Object3d::Create();
+	obj_1->SetModel(model_1);
 }
 
 void GameScene::Update() {
-	if (particleNum >= 100) {
-		particleNum = 0;
-	}
-
-	particleNum++;
-
-	for (int i = 0; i < 100; i++){
-
-		if (i == particleNum) {
-
-			//X,Y,Z全て[-5.0f,+5,0f]でランダムに分布
-			const float rnd_pos = 10.0f;
-			XMFLOAT3 pos{};
-			pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-			pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-			pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-
-			//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-			const float rnd_vel = 0.1f;
-			XMFLOAT3 vel{};
-			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-			//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-			const float rnd_acc = 0.001f;
-			XMFLOAT3 acc{};
-			acc.y = -(float)rand() / RAND_MAX * rnd_acc;
-
-			//[1.0f,2.0f]で分布
-			const float rnd_scale = 1.0f;
-			float s_scale = 0.0f;
-			s_scale = (float)rand() / RAND_MAX  * rnd_scale + rnd_scale;
-
-			//全て、[64.0f,192.0f]で分布
-			const float rnd_color = 256.0f;
-			XMFLOAT4 s_color, e_color = {};
-			s_color.x = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			s_color.y = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			s_color.z = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			//s_color.w = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			s_color.w = 1.0f;
-			e_color.x = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			e_color.y = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			e_color.z = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			//e_color.w = (float)rand() / RAND_MAX  * rnd_color ;//+( rnd_color/2);
-			e_color.w = 1.0f;
-
-			//追加
-			particleMan->Add(60,
-				pos, vel, acc,
-				s_scale,0.0f,
-				s_color,e_color);
-		}
-	}
-
 	// オブジェクト移動
 	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 	{
 		// 現在の座標を取得
-		//XMFLOAT3 position = object3d->GetPosition();
+		Vector3 position = obj_1->GetPosition();
 
-		// 移動後の座標を計算
-		//if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-		//else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-		//if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-		//else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
+		//移動後の座標を計算
+		if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
+		else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
+		if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
+		else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
 
-		//// 座標の変更を反映
-		//object3d->SetPosition(position);
+		// 座標の変更を反映
+		obj_1->SetPosition(position);
 	}
-
-	//for (int i = 0; i < _countof(kusa); i++){
-	//	// オブジェクト移動
-	//	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)){
-	//		// 現在の座標を取得
-	//		XMFLOAT3 position = kusa[i]->GetPosition();
-
-	//		// 移動後の座標を計算
-	//		if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-	//		else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-	//		if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-	//		else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
-
-	//		// 座標の変更を反映
-	//		kusa[i]->SetPosition(position);
-	//	}
-	//}
 
 	// カメラ移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A)) {
@@ -209,21 +80,17 @@ void GameScene::Update() {
 
 	// オブジェクト移動
 	if (input->PushKey(DIK_SPACE)) {
-		// 現在の座標を取得
-		XMFLOAT2 position = sprite1->GetPosition();
+		//// 現在の座標を取得
+		//XMFLOAT2 position = sprite1->GetPosition();
 
-		// 移動後の座標を計算
-		position.x += 1.0f;
+		//// 移動後の座標を計算
+		//position.x += 1.0f;
 
-		// 座標の変更を反映
-		sprite1->SetPosition(position);
+		//// 座標の変更を反映
+		//sprite1->SetPosition(position);
 	}
 
-	particleMan->Update();
-
-	//for (int i = 0; i < _countof(kusa); i++){
-	//	kusa[i]->Update();
-	//}
+	obj_1->Update();
 }
 
 void GameScene::Draw() {
@@ -247,15 +114,14 @@ void GameScene::Draw() {
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画
+	Object3d::PreDraw(cmdList);
+
+	obj_1->Draw();
+
+	Object3d::PostDraw();
+
 	// 3Dオブジェクト描画前処理
 	ParticleManager::PreDraw(cmdList);
-
-	// 3Dオブクジェクトの描画
-	particleMan->Draw();
-
-	//for (int i = 0; i < _countof(kusa); i++){
-	//	kusa[i]->Draw();
-	//}
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる

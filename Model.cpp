@@ -37,9 +37,9 @@ void Model::LoadFromOBJInternal(const std::string& modelname) {
 	std::ifstream file;
 	//モデル名
 	const string filename = modelname + ".obj"; // "modelname.obj"
-	const string directoryPath = "Resource/" + modelname + "/"; // "Resources/modelname/"
+	const string directoryPath = "Resources/" + modelname + "/"; // "Resources/modelname/"
 
-																//objファイルを開く
+	//objファイルを開く
 	file.open(directoryPath + filename);
 
 	//ファイルオープンの失敗を確認
@@ -48,7 +48,7 @@ void Model::LoadFromOBJInternal(const std::string& modelname) {
 	vector<Vector3>positions;//頂点座標
 	vector<Vector3>normals;//法線ベクトル
 	vector<Vector2>texcoords;//テクスチャUV
-							 //1行ずつ読み込む
+	//1行ずつ読み込む
 	string line;
 	while (getline(file, line)) {
 		//1行分の文字列をストリームに変換して解析しやすくする

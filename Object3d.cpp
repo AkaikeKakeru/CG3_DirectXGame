@@ -152,9 +152,9 @@ void Object3d::InitializeGraphicsPipeline() {
 	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
 
-								// 頂点シェーダの読み込みとコンパイル
+	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resource/Shader/ObjVS.hlsl",	// シェーダファイル名
+		L"Resources/shaders/ObjVS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -177,7 +177,7 @@ void Object3d::InitializeGraphicsPipeline() {
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resource/Shader/ObjPS.hlsl",	// シェーダファイル名
+		L"Resources/shaders/ObjPS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
