@@ -51,15 +51,7 @@ void Material::CreateConstBuffer(){
 	assert(SUCCEEDED(result));
 
 	// 定数バッファへデータ転送
-
 	result = constBuff_->Map(0, nullptr, (void**)&constMap_);
-	//if (SUCCEEDED(result)) {
-	//	constMap1->ambient = material_.ambient;
-	//	constMap1->diffuse = material_.diffuse;
-	//	constMap1->specular = material_.specular;
-	//	constMap1->alpha = material_.alpha;
-	//	constBuffMaterial_->Unmap(0, nullptr);
-	//}
 }
 
 void Material::LoadTexture(const std::string& directoryPath,
