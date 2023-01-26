@@ -14,6 +14,9 @@ public://サブクラス
 		Vector3 lightcolor_;//ライトの色
 	};
 
+private://静的メンバ関数
+	static void StaticInitialize(ID3D12Device* device);
+
 private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
