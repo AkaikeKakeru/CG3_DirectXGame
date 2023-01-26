@@ -32,7 +32,9 @@ public: // サブクラス
 
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0 {
-		Matrix4 mat_;	// ３Ｄ変換行列
+		Matrix4 viewproj_;//ビュープロジェクション行列
+		Matrix4 world_;//ワールド行列
+		Vector3 cameraPos_;//カメラ座標(ワールド座標)
 	};
 
 private: // 定数
