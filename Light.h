@@ -20,4 +20,14 @@ private://静的メンバ関数
 private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
+
+public://メンバ変数
+	//定数バッファ
+	ComPtr<ID3D12Resource> constBuff_;
+	//ライト光線方向(単位ベクトル)
+	Vector3 lightdir_ = { 1,0,0 };
+	//ライト色
+	Vector3 lightcolor_ = { 1,1,1 };
+	//ダーティフラグ
+	bool dirty_ = false;
 };
