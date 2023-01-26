@@ -43,6 +43,8 @@ void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
+
+	Model::staticInitialize(device);
 }
 
 void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList) {
@@ -339,19 +341,15 @@ void Object3d::UpdateViewMatrix() {
 bool Object3d::Initialize() {
 	// nullptrチェック
 	assert(device);
+	HRESULT result;
 
 	worldTransform_.Initialize();
 
-	//// ヒーププロパティ
-	//CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	// ヒーププロパティ
+	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	// リソース設定
 	CD3DX12_RESOURCE_DESC resourceDesc =
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB0) + 0xff) & ~0xff);
-
-	// リソース設定
-	resourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB1) + 0xff) & ~0xff);
-
 	return true;
 }
 
@@ -383,6 +381,5 @@ void Object3d::Draw() {
 
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, worldTransform_.constBuff_->GetGPUVirtualAddress());
-
-	model_->Draw(cmdList, 1);
+	model_->Draw(cmdList);
 }
