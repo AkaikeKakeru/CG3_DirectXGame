@@ -6,14 +6,14 @@ template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 //実体
 ComPtr<ID3D12Device> Mesh::device_ = nullptr;
 
-void Mesh::StaticInitialize(ID3D12Device* device){
+void Mesh::StaticInitialize(ID3D12Device* device) {
 	Mesh::device_ = device;
 
 	// マテリアルの静的初期化
 	Material::StaticInitialize(device);
 }
 
-void Mesh::CreateBuffers(){
+void Mesh::CreateBuffers() {
 	HRESULT result = S_FALSE;
 
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * vertices_.size());
@@ -66,16 +66,36 @@ void Mesh::CreateBuffers(){
 	ibView_.SizeInBytes = sizeIB;
 }
 
-void Mesh::Draw(ID3D12GraphicsCommandList* cmdList){
+void Mesh::CalculateSmoothVertexNormals() {
+	auto itr = smoothData.begin();
+
+	for (; itr != smoothData.end(); itr++) {
+		//各面用の共通頂点コレクション
+		std::vector<unsigned short>& v = itr->second;
+		//全頂点の法線を平均する
+		Vector3 normal = {};
+		for (unsigned short index : v) {
+			normal += vertices_[index].normal;
+		}
+
+		normal = Vector3Normalize(normal / (float)v.size());
+		//共通法線を使用するすべての頂点データに書き込む
+		for (unsigned short index : v) {
+			vertices_[index].normal = normal;
+		}
+	}
+}
+
+void Mesh::Draw(ID3D12GraphicsCommandList* cmdList) {
 	// 頂点バッファの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView_);
 	// インデックスバッファの設定
 	cmdList->IASetIndexBuffer(&ibView_);
 
 	// シェーダリソースビューをセット
-	cmdList->SetGraphicsRootDescriptorTable(2,material_->GetGpuHandle() );
-	if(true) {
-	
+	cmdList->SetGraphicsRootDescriptorTable(2, material_->GetGpuHandle());
+	if (true) {
+
 	}
 	// 定数バッファビューマテリアルをセット
 	ID3D12Resource* constBuff = material_->GetConstantBuffer();

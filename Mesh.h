@@ -29,39 +29,40 @@ public: // 静的メンバ関数
 	static void StaticInitialize(ID3D12Device* device);
 
 public: //メンバ関数
-
-	/// 名前を取得
-	const std::string& GetName() { return name_; }
-
-	/// 名前をセット
-	void SetName(const std::string& name){ name_ = name; };
-
-	/// 頂点データの追加
-	void AddVertex(const VertexPosNormalUv& vertex){ vertices_.emplace_back(vertex); }
-
-	/// 頂点インデックスの追加
-	void AddIndex(unsigned short index){ indices_.emplace_back(index); };
-
-	//エッジ平滑化データの追加
-	void AddSmoothData(unsigned short indexPosition, unsigned short indexVertex) { smoothData[indexPosition].emplace_back(indexVertex); };
-
-	/// マテリアルの取得
-	Material* GetMaterial() { return material_; }
-
-	/// マテリアルの割り当て
-	void SetMaterial(Material* material){ material_ = material; };
-
 	//バッファ生成
 	void CreateBuffers();
 
+	//平滑化された頂点法線の計算
+	void CalculateSmoothVertexNormals();
+
+	/// 名前を取得
+	const std::string& GetName() { return name_; }
+	/// マテリアルの取得
+	Material* GetMaterial() { return material_; }
 	// 頂点バッファ取得
 	const D3D12_VERTEX_BUFFER_VIEW& GetVBView() { return vbView_; }
-
 	// インデックスバッファ取得
 	const D3D12_INDEX_BUFFER_VIEW& GetIBView() { return ibView_; }
-
 	//頂点データの数を取得
 	inline size_t GetVertexCount() { return vertices_.size(); }
+
+	/// 名前をセット
+	void SetName(const std::string& name) { name_ = name; };
+	/// マテリアルの割り当て
+	void SetMaterial(Material* material) { material_ = material; };
+
+	/// 頂点データの追加
+	void AddVertex(const VertexPosNormalUv& vertex) {
+		vertices_.emplace_back(vertex);
+	}
+	/// 頂点インデックスの追加
+	void AddIndex(unsigned short index) {
+		indices_.emplace_back(index);
+	};
+	//エッジ平滑化データの追加
+	void AddSmoothData(unsigned short indexPosition, unsigned short indexVertex) {
+		smoothData[indexPosition].emplace_back(indexVertex);
+	};
 
 	// 描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
