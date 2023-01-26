@@ -24,6 +24,19 @@ public://メンバ関数
 	//定数バッファへのデータ転送
 	void TransferConstBuffer();
 
+	//ライト方向をセット
+	void SetLightDir(const Vector3& lightdir) {
+		//正規化してセット
+		lightdir_ = Vector3Normalize(lightdir);
+		dirty_ = true;
+	}
+
+	//ライト色をセット
+	void SetLightColor(const Vector3& lightcolor) {
+		lightcolor_ = lightcolor;
+		dirty_ = true;
+	}
+
 private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
