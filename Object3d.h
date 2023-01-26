@@ -2,8 +2,8 @@
 
 #include <Windows.h>
 #include <wrl.h>
-#include <d3d12.h>
-#include <d3dx12.h>
+//#include <d3d12.h>
+//#include <d3dx12.h>
 
 #include "Matrix4.h"
 #include "Vector2.h"
@@ -24,22 +24,20 @@ private: // エイリアス
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public: // サブクラス
+	// パイプラインセット
+	struct PipelineSet {
+		// ルートシグネチャ
+		ComPtr<ID3D12RootSignature> rootsignature_;
+		// パイプラインステートオブジェクト
+		ComPtr<ID3D12PipelineState> pipelinestate_;
+	};
 
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0 {
-		//Vector4 color;	// 色 (RGBA)
-		Matrix4 mat;	// ３Ｄ変換行列
+		Matrix4 mat_;	// ３Ｄ変換行列
 	};
 
 private: // 定数
-	static const int division = 50;					// 分割数
-	static const float radius;				// 底面の半径
-	static const float prizmHeight;			// 柱の高さ
-	static const int planeCount = division * 2 + division * 2;		// 面の数
-	static const int vertexCount = planeCount * 3;		// 頂点数
-
-	//static const int vertexCount = 3;		// 頂点数
-	static const int indexCount = 3 * 2;		// インデックス数
 
 public: // 静的メンバ関数
 		/// <summary>
@@ -105,15 +103,13 @@ public: // 静的メンバ関数
 
 private: // 静的メンバ変数
 		 // デバイス
-	static ID3D12Device* device;
+	static ID3D12Device* device_;
 	// コマンドリスト
-	static ID3D12GraphicsCommandList* cmdList;
+	static ID3D12GraphicsCommandList* cmdList_;
 	// ルートシグネチャ
-	static ComPtr<ID3D12RootSignature> rootsignature;
-	// パイプラインステートオブジェクト
-	static ComPtr<ID3D12PipelineState> pipelinestate;
-	// デスクリプタヒープ
-	static ComPtr<ID3D12DescriptorHeap> descHeap;
+	static ComPtr<ID3D12RootSignature> rootsignature_;
+// テクスチャあり用パイプライン
+	static PipelineSet pipelineSet_;
 
 	//ビュープロジェクション
 	static ViewProjection viewProjection_;
@@ -186,9 +182,6 @@ public: // メンバ関数
 	void SetModel(Model* model) { model_ = model; }
 
 private: // メンバ変数
-		 // 色
-	Vector4 color = { 1,1,1,1 };
-
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 

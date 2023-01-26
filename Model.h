@@ -6,8 +6,6 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include <unordered_map>
-//#include <d3d12.h>
-//#include <d3dx12.h>
 
 class Model {
 private://省略
@@ -16,13 +14,13 @@ private://省略
 
 public://静的メンバ関数
 	//静的初期化
-	static void staticInitialize(ID3D12Device* device);
+	static void StaticInitialize(ID3D12Device* device);
 	//OBJ読み込み
-	static Model* LoadFromOBJ(const std::string& modelname,bool smoothing = false);
+	static Model* LoadFromOBJ(const std::string& modelname, bool smoothing = false);
 
 private://メンバ関数
-	//// テクスチャ読み込み
-	//void LoadTexture(const std::string& directoryPath, const std::string filename);
+	// テクスチャ読み込み
+	void LoadTextures();
 
 	// マテリアル読み込み
 	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
@@ -33,6 +31,12 @@ private://メンバ関数
 		materials_.emplace(material->name_, material);
 	}
 
+	void LoadFromOBJInternal(const std::string& modelname, bool smoothing = false);
+
+	//デスクリプタヒープの初期化
+	void InitializeDescriptorHeap();
+
+
 public://メンバ関数
 	// デストラクタ
 	~Model();
@@ -40,19 +44,13 @@ public://メンバ関数
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-private: // 非公開メンバ関数
-	void LoadFromOBJInternal(const std::string& modelname,bool smoothing = false);
-	//デスクリプタヒープの初期化
-	void InitializeDescriptorHeap();
-
-public://セッタ
-	static void SetDevice(ID3D12Device* device) { Model::device_ = device; }
-
 private:
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
 	// デスクリプタサイズ
 	static UINT descriptorIncrementSize_;
+	//ディレクトリパス
+	static const std::string Directory_;
 
 private:
 	// 名前
