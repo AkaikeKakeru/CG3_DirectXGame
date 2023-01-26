@@ -30,7 +30,7 @@ public: // 静的メンバ関数
 
 public: //メンバ関数
 
-		/// 名前を取得
+	/// 名前を取得
 	const std::string& GetName() { return name_; }
 
 	/// 名前をセット
@@ -41,6 +41,9 @@ public: //メンバ関数
 
 	/// 頂点インデックスの追加
 	void AddIndex(unsigned short index){ indices_.emplace_back(index); };
+
+	//エッジ平滑化データの追加
+	void AddSmoothData(unsigned short indexPosition, unsigned short indexVertex) { smoothData[indexPosition].emplace_back(indexVertex); };
 
 	/// マテリアルの取得
 	Material* GetMaterial() { return material_; }
