@@ -36,28 +36,34 @@ void Material::CreateConstBuffer(){
 	HRESULT result;
 
 	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapPropsMaterial = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDescMaterial = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff);
+	CD3DX12_RESOURCE_DESC resourceDesc =
+		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff);
 
 	// 定数バッファの生成
 	result = device_->CreateCommittedResource(
-		&heapPropsMaterial, // アップロード可能
-		D3D12_HEAP_FLAG_NONE,
-		&resourceDescMaterial,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
+		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuff_));
 	assert(SUCCEEDED(result));
 
-	// 定数バッファへデータ転送
+	// 定数バッファのマッピング
 	result = constBuff_->Map(0, nullptr, (void**)&constMap_);
+	assert(SUCCEEDED(result));
 }
 
 void Material::LoadTexture(const std::string& directoryPath,
 	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuHandle,
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle) {
 	HRESULT result = S_FALSE;
+
+	// テクスチャなし
+	if (filename_.size() == 0) {
+		filename_ = "white1x1.png";
+	}
+
+	cpuDescHandleSRV_ = cpuHandle;
+	gpuDescHandleSRV_ = gpuHandle;
 
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
@@ -67,7 +73,7 @@ void Material::LoadTexture(const std::string& directoryPath,
 
 	//ユニコード文字列に変換する
 	wchar_t wfilepath[128];
-	int iBufferSize = MultiByteToWideChar(
+	MultiByteToWideChar(
 		CP_ACP, 0,
 		filepath.c_str(), -1, wfilepath,
 		_countof(wfilepath));
@@ -121,8 +127,7 @@ void Material::LoadTexture(const std::string& directoryPath,
 	}
 
 	// シェーダリソースビュー作成
-	cpuDescHandleSRV_ = cpuHandle;
-	gpuDescHandleSRV_ = gpuHandle;
+
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
 	D3D12_RESOURCE_DESC resDesc = texbuff_->GetDesc();

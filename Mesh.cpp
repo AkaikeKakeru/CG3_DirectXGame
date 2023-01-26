@@ -71,13 +71,17 @@ void Mesh::Draw(ID3D12GraphicsCommandList* cmdList){
 	cmdList->IASetVertexBuffers(0, 1, &vbView_);
 	// インデックスバッファの設定
 	cmdList->IASetIndexBuffer(&ibView_);
-	// 定数バッファビューマテリアルをセット
-	ComPtr<ID3D12Resource> constBuff = material_->GetConstantBuffer();
-	cmdList->SetGraphicsRootConstantBufferView(1,
-		constBuff->GetGPUVirtualAddress());
 
 	// シェーダリソースビューをセット
 	cmdList->SetGraphicsRootDescriptorTable(2,material_->GetGpuHandle() );
+	if(true) {
+	
+	}
+	// 定数バッファビューマテリアルをセット
+	ID3D12Resource* constBuff = material_->GetConstantBuffer();
+
+	cmdList->SetGraphicsRootConstantBufferView(1,
+		constBuff->GetGPUVirtualAddress());
 
 	// 描画コマンド
 	cmdList->DrawIndexedInstanced((UINT)indices_.size(), 1, 0, 0, 0);

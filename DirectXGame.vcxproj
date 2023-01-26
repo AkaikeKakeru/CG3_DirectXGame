@@ -95,6 +95,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="Degree.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
@@ -175,6 +176,7 @@
     <None Include="Resources\shaders\Particle.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="Degree.h" />
     <ClInclude Include="DirectXCommon.h" />

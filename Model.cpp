@@ -2,11 +2,7 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
-#include <string>
-#include <vector>
-#include <DirectXTex.h>
 using namespace std;
-using namespace DirectX;
 
 template <class T>
 using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -16,7 +12,9 @@ ComPtr<ID3D12Device> Model::device_ = nullptr;
 // デスクリプタサイズ
 UINT Model::descriptorIncrementSize_;
 
-void Model::staticInitialize(ID3D12Device* device) {
+const std::string Model::Directory_ = "Resources/";
+
+void Model::StaticInitialize(ID3D12Device* device) {
 	Model::device_ = device;
 
 	// メッシュの静的初期化
@@ -32,8 +30,21 @@ Model* Model::LoadFromOBJ(const std::string& modelname, bool smoothing) {
 	//デスクリプタヒープの生成
 	model->InitializeDescriptorHeap();
 
+	model->LoadTextures();
 
 	return model;
+}
+
+Model::~Model() {
+	for (auto m : meshes_) {
+		delete m;
+	}
+	meshes_.clear();
+
+	for (auto m : materials_) {
+		delete m.second;
+	}
+	materials_.clear();
 }
 
 void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
@@ -41,7 +52,7 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 	std::ifstream file;
 	//モデル名
 	const string filename = modelname + ".obj"; // "modelname.obj"
-	const string directoryPath = "Resources/" + modelname + "/"; // "Resources/modelname/"
+	const string directoryPath = Directory_ + modelname + "/"; // "Resources/modelname/"
 
 	//objファイルを開く
 	file.open(directoryPath + filename);
@@ -140,7 +151,6 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 				}
 			}
 		}
-
 		//先頭文字列がfならポリゴン(三角形)
 		if (key == "f") {
 			int faceIndexCount = 0;
@@ -150,6 +160,7 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 				//頂点インデックス1個分の文字列をストリームに変換して解析しやすくする
 				std::istringstream index_stream(index_string);
 				unsigned short indexPosition, indexNormal, indexTexcoord;
+				//頂点番号
 				index_stream >> indexPosition;
 
 				Material* material = mesh->GetMaterial();
@@ -157,7 +168,6 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 
 				// マテリアル、テクスチャがある場合
 				if (material && material->filename_.size() > 0) {
-
 					index_stream >> indexTexcoord;
 					index_stream.seekg(1, ios_base::cur);//スラッシュを飛ばす
 					index_stream >> indexNormal;
@@ -193,8 +203,6 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 						mesh->AddVertex(vertex);
 					}
 				}
-				//vertices_.emplace_back(vertex);
-
 				//頂点インデックスに追加
 				if (faceIndexCount >= 3) {
 					// 四角形ポリゴンの4点目なので、
@@ -213,7 +221,62 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 	}
 	//ファイルを閉じる
 	file.close();
+
+	// コンテナに登録
+	meshes_.emplace_back(mesh);
+
+	// メッシュのマテリアルチェック
+	for (auto& m : meshes_) {
+		// マテリアルの割り当てがない
+		if (m->GetMaterial() == nullptr) {
+			if (defaultMaterial_ == nullptr) {
+				// デフォルトマテリアルを生成
+				defaultMaterial_ = Material::Create();
+				defaultMaterial_->name_ = "no material";
+				materials_.emplace(defaultMaterial_->name_, defaultMaterial_);
+			}
+			// デフォルトマテリアルをセット
+			m->SetMaterial(defaultMaterial_);
+		}
+	}
+
+	// メッシュのバッファ生成
+	for (auto& m : meshes_) {
+		m->CreateBuffers();
+	}
+
+	// マテリアルの数値を定数バッファに反映
+	for (auto& m : materials_) {
+		m.second->Update();
+	}
 }
+
+void Model::LoadTextures() {
+	int textureIndex = 0;
+	string directoryPath = Directory_ + name_ + "/";
+
+	for (auto& m : materials_) {
+		Material* material = m.second;
+
+		CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(
+			descHeap_->GetCPUDescriptorHandleForHeapStart(), textureIndex,
+			descriptorIncrementSize_);
+		CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			descHeap_->GetGPUDescriptorHandleForHeapStart(), textureIndex,
+			descriptorIncrementSize_);
+
+		// テクスチャなし
+		if (material->filename_.size() <= 0) {
+			directoryPath = Directory_;
+		}
+
+		// テクスチャ読み込み
+		material->LoadTexture(directoryPath, cpuDescHandleSRV, gpuDescHandleSRV);
+
+		textureIndex++;
+	}
+}
+
 void Model::LoadMaterial(const std::string& directoryPath, const std::string& filename) {
 	//ファイルストリーム
 	std::ifstream file;
@@ -321,19 +384,8 @@ void Model::InitializeDescriptorHeap() {
 	}
 
 	// デスクリプタサイズを取得
-	descriptorIncrementSize_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-}
-
-Model::~Model() {
-	for (auto m : meshes_) {
-		delete m;
-	}
-	meshes_.clear();
-
-	for (auto m : materials_) {
-		delete m.second;
-	}
-	materials_.clear();
+	descriptorIncrementSize_ =
+		device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
 void Model::Draw(ID3D12GraphicsCommandList* cmdList) {
