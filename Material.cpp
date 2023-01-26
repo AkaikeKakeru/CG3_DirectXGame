@@ -36,10 +36,18 @@ void Material::CreateConstBuffer(){
 	HRESULT result;
 
 	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	D3D12_HEAP_PROPERTIES heapProps{};
+	heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
+
 	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff);
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Width = (sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff;
+	resourceDesc.Height = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
 	// 定数バッファの生成
 	result = device_->CreateCommittedResource(
@@ -97,14 +105,25 @@ void Material::LoadTexture(const std::string& directoryPath,
 	// 読み込んだディフューズテクスチャをSRGBとして扱う
 	metadata.format = MakeSRGB(metadata.format);
 
-	// リソース設定
-	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		metadata.format, metadata.width, (UINT)metadata.height, (UINT16)metadata.arraySize,
-		(UINT16)metadata.mipLevels);
 
 	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps =
-		CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+	D3D12_HEAP_PROPERTIES heapProps{};
+	heapProps.Type = D3D12_HEAP_TYPE_CUSTOM;
+	heapProps.CPUPageProperty =
+		D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+	heapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
+
+
+	// リソース設定
+	D3D12_RESOURCE_DESC texresDesc{};
+	texresDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	texresDesc.Format = metadata.format;
+	texresDesc.Width = metadata.width;
+	texresDesc.Height = (UINT)metadata.height;
+	texresDesc.DepthOrArraySize = (UINT16)metadata.arraySize;
+	texresDesc.MipLevels = (UINT16)metadata.mipLevels;
+	texresDesc.SampleDesc.Count = 1;
+
 
 	// テクスチャ用バッファの生成
 	result = device_->CreateCommittedResource(

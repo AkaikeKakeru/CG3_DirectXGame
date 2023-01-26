@@ -360,12 +360,24 @@ void DirectXCommon::CreateDepthBuffer() {
 	HRESULT result = S_FALSE;
 
 	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	D3D12_HEAP_PROPERTIES heapProps{};
+	heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
+
 	// リソース設定
-	CD3DX12_RESOURCE_DESC depthResDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-	  DXGI_FORMAT_D32_FLOAT, backBufferWidth_, backBufferHeight_, 1, 0, 1, 0,
-	  D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
-	CD3DX12_CLEAR_VALUE clearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
+
+	D3D12_RESOURCE_DESC depthResDesc{};
+	depthResDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	depthResDesc.Width = backBufferWidth_;
+	depthResDesc.Height = backBufferHeight_;
+	depthResDesc.DepthOrArraySize = 1;
+	depthResDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthResDesc.SampleDesc.Count = 1;
+	depthResDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+	D3D12_CLEAR_VALUE clearValue{};
+	clearValue.DepthStencil.Depth = 1.0f;
+	clearValue.Format = DXGI_FORMAT_D32_FLOAT;
+
 	// リソースの生成
 	result = device_->CreateCommittedResource(
 	  &heapProps, D3D12_HEAP_FLAG_NONE, &depthResDesc,
