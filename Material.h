@@ -36,11 +36,11 @@ private:
 	}
 
 	void Initialize();
-	void Update();
-
 	// 定数バッファの生成
 	void CreateConstBuffer();
 
+public:
+	void Update();
 	//テクスチャ読み込み
 	void LoadTexture(const std::string& directoryPath,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE cpuHandle,
