@@ -19,6 +19,8 @@ private://静的メンバ関数
 public://メンバ関数
 	void Initialize();
 
+	//定数バッファ生成
+	void CreateConstBuffer();
 	//定数バッファへのデータ転送
 	void TransferConstBuffer();
 

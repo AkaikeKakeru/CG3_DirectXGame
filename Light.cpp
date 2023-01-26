@@ -17,6 +17,11 @@ void Light::StaticInitialize(ID3D12Device* device) {
 }
 
 void Light::Initialize() {
+	CreateConstBuffer();
+	TransferConstBuffer();
+}
+
+void Light::CreateConstBuffer(){
 	HRESULT result;
 
 	// ヒーププロパティ
