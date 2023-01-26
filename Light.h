@@ -18,6 +18,7 @@ private://静的メンバ関数
 	static void StaticInitialize(ID3D12Device* device);
 public://メンバ関数
 	void Initialize();
+	void Update();
 
 	//定数バッファ生成
 	void CreateConstBuffer();

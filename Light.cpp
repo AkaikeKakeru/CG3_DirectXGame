@@ -21,6 +21,13 @@ void Light::Initialize() {
 	TransferConstBuffer();
 }
 
+void Light::Update(){
+	if (dirty_) {
+		TransferConstBuffer();
+		dirty_ = false;
+	}
+}
+
 void Light::CreateConstBuffer(){
 	HRESULT result;
 
