@@ -16,7 +16,7 @@ ComPtr<ID3D12Device> Model::device_ = nullptr;
 // デスクリプタサイズ
 UINT Model::descriptorIncrementSize_;
 
-Model* Model::LoadFromOBJ(const std::string& modelname) {
+Model* Model::LoadFromOBJ(const std::string& modelname,bool smoothing) {
 	//インスタンス
 	Model* model = new Model();
 
@@ -24,7 +24,7 @@ Model* Model::LoadFromOBJ(const std::string& modelname) {
 	model->InitializeDescriptorHeap();
 
 	//読み込み
-	model->LoadFromOBJInternal(modelname);
+	model->LoadFromOBJInternal(modelname,smoothing);
 
 	//バッファ生成
 	model->CreateBaffers();
@@ -32,7 +32,7 @@ Model* Model::LoadFromOBJ(const std::string& modelname) {
 	return model;
 }
 
-void Model::LoadFromOBJInternal(const std::string& modelname) {
+void Model::LoadFromOBJInternal(const std::string& modelname,bool smoothing) {
 	//ファイルストリーム
 	std::ifstream file;
 	//モデル名
