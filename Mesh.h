@@ -9,6 +9,7 @@
 
 #include "Vector3.h"
 #include "Vector2.h"
+#include <unordered_map>
 
 class Mesh {
 private: // エイリアス
@@ -82,4 +83,7 @@ private://メンバ変数
 
 	//マテリアル
 	Material* material_{};
+
+	//頂点法線スムージング用データ
+	std::unordered_map<unsigned short, std::vector<unsigned short>> smoothData;
 };
