@@ -339,6 +339,8 @@ bool Object3d::Initialize() {
 }
 
 void Object3d::Update() {
+	HRESULT result;
+
 	// 定数バッファへデータ転送
 	worldTransform_.Maping();
 
@@ -351,6 +353,18 @@ void Object3d::Update() {
 		* viewProjection_.matProjection_;
 
 	worldTransform_.constBuff_->Unmap(0, nullptr);
+
+
+	const Vector3& cameraPos = viewProjection_.camera_.eye_;
+
+	//ライトの定数バッファへ転送
+	ConstBufferDataB0* constMap = nullptr;
+	result = constBuffB0_->Map(0, nullptr, (void**)&constMap);
+
+	constMap->viewproj_ = viewProjection_.matProjection_;
+	constMap->world_ = worldTransform_.matWorld_;
+	constMap->cameraPos_ = cameraPos;
+	constBuffB0_->Unmap(0, nullptr);
 }
 
 void Object3d::Draw() {

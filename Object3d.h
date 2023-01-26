@@ -140,6 +140,9 @@ public: // メンバ関数
 	void SetModel(Model* model) { model_ = model; }
 
 private: // メンバ変数
+	//定数バッファ
+	ComPtr<ID3D12Resource> constBuffB0_;
+
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 
