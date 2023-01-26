@@ -19,6 +19,7 @@ private://静的メンバ関数
 public://メンバ関数
 	void Initialize();
 	void Update();
+	void Draw(ID3D12GraphicsCommandList* cmdList,UINT rootParameterIndex);
 
 	//定数バッファ生成
 	void CreateConstBuffer();

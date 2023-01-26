@@ -21,14 +21,20 @@ void Light::Initialize() {
 	TransferConstBuffer();
 }
 
-void Light::Update(){
+void Light::Update() {
 	if (dirty_) {
 		TransferConstBuffer();
 		dirty_ = false;
 	}
 }
 
-void Light::CreateConstBuffer(){
+void Light::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex) {
+	cmdList->SetGraphicsRootConstantBufferView(
+		rootParameterIndex, constBuff_->GetGPUVirtualAddress());
+}
+
+
+void Light::CreateConstBuffer() {
 	HRESULT result;
 
 	// ヒーププロパティ
@@ -53,7 +59,7 @@ void Light::CreateConstBuffer(){
 	assert(SUCCEEDED(result));
 }
 
-void Light::TransferConstBuffer(){
+void Light::TransferConstBuffer() {
 	HRESULT result;
 
 	ConstBufferDataLight* constMap = nullptr;
