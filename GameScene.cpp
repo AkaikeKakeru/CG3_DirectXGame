@@ -78,16 +78,16 @@ void GameScene::Update() {
 		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
 	}
 
-	// オブジェクト移動
-	if (input->PushKey(DIK_SPACE)) {
-		//// 現在の座標を取得
-		//XMFLOAT2 position = sprite1->GetPosition();
+	// オブジェクト回転
+	 {
+		// 現在の座標を取得
+		Vector3 rot = obj_1->GetRotation();
 
-		//// 移動後の座標を計算
-		//position.x += 1.0f;
+		// 移動後の座標を計算
+		rot.y += ConvertToRadian(1.0f);
 
-		//// 座標の変更を反映
-		//sprite1->SetPosition(position);
+		// 座標の変更を反映
+		obj_1->SetRotation(rot);
 	}
 
 	obj_1->Update();
