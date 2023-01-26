@@ -24,12 +24,6 @@ private: // エイリアス
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public: // サブクラス
-		// 頂点データ構造体
-	struct VertexPosNormalUv {
-		Vector3 pos; // xyz座標
-		Vector3 normal; // 法線ベクトル
-		Vector2 uv;  // uv座標
-	};
 
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0 {
@@ -63,6 +57,7 @@ public: // サブクラス
 			alpha = 1.0f;
 		}
 	};
+
 private: // 定数
 	static const int division = 50;					// 分割数
 	static const float radius;				// 底面の半径
