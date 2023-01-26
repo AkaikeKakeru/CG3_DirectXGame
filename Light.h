@@ -14,7 +14,7 @@ public://サブクラス
 		Vector3 lightcolor_;//ライトの色
 	};
 
-private://静的メンバ関数
+public://静的メンバ関数
 	//静的初期化
 	static void StaticInitialize(ID3D12Device* device);
 
@@ -48,7 +48,7 @@ private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
 
-public://メンバ変数
+private://メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuff_;
 	//ライト光線方向(単位ベクトル)
