@@ -40,3 +40,15 @@ void Light::Initialize() {
 		IID_PPV_ARGS(&constBuff_));
 	assert(SUCCEEDED(result));
 }
+
+void Light::TransferConstBuffer(){
+	HRESULT result;
+
+	ConstBufferDataLight* constMap = nullptr;
+	result = constBuff_->Map(0, nullptr, (void**)&constMap);
+	if (SUCCEEDED(result)) {
+		constMap->lightv_ = -lightdir_;
+		constMap->lightcolor_ = lightcolor_;
+		constBuff_->Unmap(0, nullptr);
+	}
+}

@@ -19,6 +19,9 @@ private://静的メンバ関数
 public://メンバ関数
 	void Initialize();
 
+	//定数バッファへのデータ転送
+	void TransferConstBuffer();
+
 private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
