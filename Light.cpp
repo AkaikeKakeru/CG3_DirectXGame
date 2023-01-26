@@ -16,6 +16,14 @@ void Light::StaticInitialize(ID3D12Device* device) {
 	Light::device_ = device;
 }
 
+Light* Light::Create() {
+	Light* light = new Light();
+
+	light->Initialize();
+
+	return light;
+}
+
 void Light::Initialize() {
 	CreateConstBuffer();
 	TransferConstBuffer();

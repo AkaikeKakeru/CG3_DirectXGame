@@ -15,7 +15,12 @@ public://サブクラス
 	};
 
 private://静的メンバ関数
+	//静的初期化
 	static void StaticInitialize(ID3D12Device* device);
+
+	//生成
+	static Light* Create();
+
 public://メンバ関数
 	void Initialize();
 	void Update();
