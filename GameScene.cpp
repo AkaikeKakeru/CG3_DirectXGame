@@ -5,6 +5,9 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+#include <sstream>
+#include <iomanip>
+
 using namespace DirectX;
 
 template <class T>
@@ -17,9 +20,11 @@ GameScene::GameScene() {
 }
 
 GameScene::~GameScene() {
-	safe_delete( spriteBG);
-	safe_delete( obj_1);
-	safe_delete( model_1);
+	safe_delete(spriteBG);
+	safe_delete(obj_1);
+	safe_delete(model_1);
+
+	safe_delete(light_);
 
 	//スプライトの解放
 	//safe_delete(sprite1);
@@ -48,9 +53,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	model_1 = Model::LoadFromOBJ("sphere",true);
+	model_1 = Model::LoadFromOBJ("sphere", true);
 	obj_1 = Object3d::Create();
 	obj_1->SetModel(model_1);
+
+	//ライト生成
+	light_ = Light::Create();
+	light_->SetLightColor({ 1,1,1 });
+	Object3d::SetLight(light_);
 }
 
 void GameScene::Update() {
@@ -71,15 +81,15 @@ void GameScene::Update() {
 	}
 
 	// カメラ移動
-	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A)) {
-		if (input->PushKey(DIK_W)) { ParticleManager::CameraMoveEyeVector({ 0.0f,+1.0f,0.0f }); }
-		else if (input->PushKey(DIK_S)) { ParticleManager::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
-		if (input->PushKey(DIK_D)) { ParticleManager::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
-		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
-	}
+	//if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A)) {
+	//	if (input->PushKey(DIK_W)) { ParticleManager::CameraMoveEyeVector({ 0.0f,+1.0f,0.0f }); }
+	//	else if (input->PushKey(DIK_S)) { ParticleManager::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
+	//	if (input->PushKey(DIK_D)) { ParticleManager::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
+	//	else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
+	//}
 
 	// オブジェクト回転
-	 {
+	{
 		// 現在の座標を取得
 		Vector3 rot = obj_1->GetRotation();
 
@@ -90,6 +100,21 @@ void GameScene::Update() {
 		obj_1->SetRotation(rot);
 	}
 
+	{
+		static Vector3 lightDir = { 0,1,5 };
+
+		if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A)) {
+			if (input->PushKey(DIK_W)) { lightDir.y += 1.0f; }
+			else if (input->PushKey(DIK_S)) {lightDir.y -= 1.0f; }
+			if (input->PushKey(DIK_D)) { lightDir.x += 1.0f; }
+			else if (input->PushKey(DIK_A)) { lightDir.x -= 1.0f; }
+		}
+
+		light_->SetLightDir(lightDir);
+
+	}
+
+	light_->Update();
 	obj_1->Update();
 }
 
