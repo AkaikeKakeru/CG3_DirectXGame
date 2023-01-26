@@ -27,6 +27,8 @@ Object3d::PipelineSet Object3d::pipelineSet_;
 
 ViewProjection Object3d::viewProjection_;
 
+Light* Object3d::light_ = nullptr;
+
 void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height) {
 	// nullptrチェック
 	assert(device);

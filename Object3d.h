@@ -13,12 +13,14 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 
+#include "Light.h"
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
 class Object3d {
 private: // エイリアス
-		 // Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public: // サブクラス
@@ -40,115 +42,74 @@ public: // サブクラス
 private: // 定数
 
 public: // 静的メンバ関数
-		/// <summary>
-		/// 静的初期化
-		/// </summary>
-		/// <param name="device">デバイス</param>
-		/// <param name="window_width">画面幅</param>
-		/// <param name="window_height">画面高さ</param>
+	// 静的初期化
 	static void StaticInitialize(ID3D12Device* device, int window_width, int window_height);
 
-	/// <summary>
-	/// 描画前処理
-	/// </summary>
-	/// <param name="cmdList">描画コマンドリスト</param>
+	// 描画前処理
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
 
-	/// <summary>
-	/// 描画後処理
-	/// </summary>
+	// 描画後処理
 	static void PostDraw();
 
-	/// <summary>
-	/// 3Dオブジェクト生成
-	/// </summary>
-	/// <returns></returns>
+	// 3Dオブジェクト生成
 	static Object3d* Create();
 
-	/// <summary>
-	/// 視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
+	// 視点座標の取得
 	static const Vector3& GetEye() { return viewProjection_.camera_.eye_; }
 
-	/// <summary>
-	/// 視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
+	// 視点座標の設定
 	static void SetEye(Vector3 eye);
 
-	/// <summary>
-	/// 注視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
+	// 注視点座標の取得
 	static const Vector3& GetTarget() { return viewProjection_.camera_.target_; }
 
-	/// <summary>
-	/// 注視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
+	// 注視点座標の設定
 	static void SetTarget(Vector3 target);
 
-	/// <summary>
-	/// ベクトルによる移動
-	/// </summary>
-	/// <param name="move">移動量</param>
+	static void SetLight(Light* light) {
+		Object3d::light_ = light;
+	}
+
+	// ベクトルによる移動
 	static void CameraMoveVector(Vector3 move);
 
-	/// <summary>
-	/// ベクトルによる視点移動
-	/// </summary>
-	/// <param name="move">移動量</param>
+	// ベクトルによる視点移動
 	static void CameraMoveEyeVector(Vector3 move);
 
 private: // 静的メンバ変数
-		 // デバイス
+	// デバイス
 	static ID3D12Device* device_;
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* cmdList_;
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature_;
-// テクスチャあり用パイプライン
+	// テクスチャあり用パイプライン
 	static PipelineSet pipelineSet_;
 
 	//ビュープロジェクション
 	static ViewProjection viewProjection_;
 
+	//ライト
+	static Light* light_;
+
 private:// 静的メンバ関数
-		/// <summary>
-		/// カメラ初期化
-		/// </summary>
-		/// <param name="window_width">画面横幅</param>
-		/// <param name="window_height">画面縦幅</param>
+	// カメラ初期化
 	static void InitializeCamera(int window_width, int window_height);
 
-	/// <summary>
-	/// グラフィックパイプライン生成
-	/// </summary>
-	/// <returns>成否</returns>
+	// グラフィックパイプライン生成
 	static void InitializeGraphicsPipeline();
 
-	/// <summary>
-	/// ビュー行列を更新
-	/// </summary>
+	// ビュー行列を更新
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
 	bool Initialize();
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
+	// 毎フレーム処理
 	void Update();
-
-	/// <summary>
-	/// 描画
-	/// </summary>
+	// 描画
 	void Draw();
 
-	/// <summary>
-	/// 座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
+	// 座標の取得
 	const Vector3& GetPosition() const { return worldTransform_.position_; }
 
 	//スケールの取得
@@ -160,10 +121,7 @@ public: // メンバ関数
 	//ビュープロジェクションの取得
 	const ViewProjection& GetViewProjection() const { return viewProjection_; }
 
-	/// <summary>
 	/// 座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
 	void SetPosition(const Vector3& position) { this->worldTransform_.position_ = position; }
 
 	//スケールの設定
