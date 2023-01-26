@@ -9,13 +9,15 @@ private: // エイリアス
 	template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public://サブクラス
-	struct ConstBufferData {
+	struct ConstBufferDataLight {
 		Vector3 lightv_; //ライトへの方向ベクトル
 		Vector3 lightcolor_;//ライトの色
 	};
 
 private://静的メンバ関数
 	static void StaticInitialize(ID3D12Device* device);
+public://メンバ関数
+	void Initialize();
 
 private://静的メンバ変数
 	//デバイス
