@@ -48,7 +48,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	model_1 = Model::LoadFromOBJ("sphere");
+	model_1 = Model::LoadFromOBJ("sphere",true);
 	obj_1 = Object3d::Create();
 	obj_1->SetModel(model_1);
 }
