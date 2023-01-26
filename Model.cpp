@@ -16,7 +16,7 @@ ComPtr<ID3D12Device> Model::device_ = nullptr;
 // デスクリプタサイズ
 UINT Model::descriptorIncrementSize_;
 
-void Model::staticInitialize(ID3D12Device* device){
+void Model::staticInitialize(ID3D12Device* device) {
 	Model::device_ = device;
 
 	// メッシュの静的初期化
@@ -210,14 +210,6 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 				faceIndexCount++;
 			}
 		}
-		//先頭文字列がmtlliibならマテリアル
-		if (key == "mtllib") {
-			//マテリアルのファイル名読み込み
-			string filename;
-			line_stream >> filename;
-			//マテリアル読み込み
-			LoadMaterial(directoryPath, filename);
-		}
 	}
 	//ファイルを閉じる
 	file.close();
@@ -251,7 +243,7 @@ void Model::LoadMaterial(const std::string& directoryPath, const std::string& fi
 		//先頭文字列がnewmtlならマテリアル名
 		if (key == "newmtl") {
 			//マテリアル生成済みなら
-			if (material != nullptr) {
+			if (material) {
 				AddMaterial(material);
 			}
 
@@ -317,22 +309,22 @@ void Model::InitializeDescriptorHeap() {
 	size_t count = materials_.size();
 
 	// デスクリプタヒープを生成	
-	if(count>0) {
-	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
-	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
-	descHeapDesc.NumDescriptors = (UINT)count; // シェーダーリソースビューの数
-	result = device_->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap_));//生成
-	if (FAILED(result)) {
-		assert(0);
-	}
+	if (count > 0) {
+		D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
+		descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
+		descHeapDesc.NumDescriptors = (UINT)count; // シェーダーリソースビューの数
+		result = device_->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap_));//生成
+		if (FAILED(result)) {
+			assert(0);
+		}
 	}
 
 	// デスクリプタサイズを取得
 	descriptorIncrementSize_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
-Model::~Model(){
+Model::~Model() {
 	for (auto m : meshes_) {
 		delete m;
 	}
@@ -350,7 +342,7 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList) {
 	ID3D12DescriptorHeap* ppHeaps[] = { descHeap_.Get() };
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
-	for (auto mesh : meshes_){
+	for (auto mesh : meshes_) {
 		// シェーダリソースビューをセット
 		mesh->Draw(cmdList);
 	}
