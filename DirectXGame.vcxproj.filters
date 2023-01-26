@@ -34,6 +34,18 @@
     <Filter Include="ソース ファイル\Math">
       <UniqueIdentifier>{a27618bb-8113-4cd2-8925-8bd6884213f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\3d\Light">
+      <UniqueIdentifier>{ff116a73-f412-4e05-a541-32f2d2238fb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\3d\Camera">
+      <UniqueIdentifier>{796cb086-5a1a-4d4f-96be-adee5ac5584d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d\Camera">
+      <UniqueIdentifier>{d87d0432-e881-439c-81d0-c45adac06790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d\Light">
+      <UniqueIdentifier>{f8c3e9bc-3d7d-469e-9cc7-95924b4e7bfa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,7 +106,10 @@
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>ソース ファイル\3d</Filter>
+      <Filter>ソース ファイル\3d\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>ソース ファイル\3d\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +202,10 @@
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>ヘッダー ファイル\3d</Filter>
+      <Filter>ヘッダー ファイル\3d\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>ヘッダー ファイル\3d\Light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
