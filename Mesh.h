@@ -57,6 +57,9 @@ public: //メンバ関数
 	// インデックスバッファ取得
 	const D3D12_INDEX_BUFFER_VIEW& GetIBView() { return ibView_; }
 
+	//頂点データの数を取得
+	inline size_t GetVertexCount() { return vertices_.size(); }
+
 	// 描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
