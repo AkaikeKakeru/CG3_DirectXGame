@@ -90,15 +90,6 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 		}
 		// 先頭文字列がgならグループの開始
 		if (key == "g") {
-
-			if (mesh->GetName().size() > 0) {
-				// コンテナに登録
-				meshes_.emplace_back(mesh);
-				// 次のメッシュ生成
-				mesh = new Mesh;
-				indexCountTex = 0;
-			}
-
 			// グループ名読み込み
 			string groupName;
 			line_stream >> groupName;
@@ -177,30 +168,9 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 					vertex.normal = normals[indexNormal - 1];
 					vertex.uv = texcoords[indexTexcoord - 1];
 					mesh->AddVertex(vertex);
-				}
-				else {
-					char c;
-					index_stream >> c;
-					// スラッシュ2連続の場合、頂点番号のみ
-					if (c == '/') {
-						// 頂点データの追加
-						Mesh::VertexPosNormalUv vertex{};
-						vertex.pos = positions[indexPosition - 1];
-						vertex.normal = { 0, 0, 1 };
-						vertex.uv = { 0, 0 };
-						mesh->AddVertex(vertex);
-					}
-					else {
-						index_stream.seekg(-1, ios_base::cur); // 1文字戻る
-						index_stream >> indexTexcoord;
-						index_stream.seekg(1, ios_base::cur); // スラッシュを飛ばす
-						index_stream >> indexNormal;
-						// 頂点データの追加
-						Mesh::VertexPosNormalUv vertex{};
-						vertex.pos = positions[indexPosition - 1];
-						vertex.normal = normals[indexNormal - 1];
-						vertex.uv = { 0, 0 };
-						mesh->AddVertex(vertex);
+					//エッジ平滑化のデータを追加
+					if(smoothing) {
+						mesh->AddSmoothData(indexPosition, (unsigned short)mesh->GetVertexCount() - 1);
 					}
 				}
 				//頂点インデックスに追加
@@ -221,6 +191,11 @@ void Model::LoadFromOBJInternal(const std::string& modelname, bool smoothing) {
 	}
 	//ファイルを閉じる
 	file.close();
+
+	//頂点法線の平均によるエッジ平滑化
+	if (smoothing) {
+		mesh->CalculateSmoothVertexNormals();
+	}
 
 	// コンテナに登録
 	meshes_.emplace_back(mesh);
