@@ -243,16 +243,27 @@ void Object3d::Update() {
 
 	worldTransform_.UpdateMatrix();
 
-	//const Vector3& cameraPos = viewProjection_.camera_.eye_;
+	// ヒーププロパティ
+	D3D12_HEAP_PROPERTIES heapProps{};
+	heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
 
-	////ライトの定数バッファへ転送
-	//viewProjection_.Maping();
+	// リソース設定
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Width = (sizeof(ConstBufferDataB0) + 0xff) & ~0xff;
+	resourceDesc.Height = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
-	//viewProjection_.constMap_->projection_ = viewProjection_.matProjection_;
-	//viewProjection_.constMap_->world_ = worldTransform_.matWorld_;
-	//viewProjection_.constMap_->cameraPos_ = cameraPos;
-	//constBuffB0_->Unmap(0, nullptr);
+	// 定数バッファの生成
+	result = device_->CreateCommittedResource(
+		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+		IID_PPV_ARGS(&constBuffB0_));
+	assert(SUCCEEDED(result));
 
+	//定数バッファへ転送
 	TransferMatrixWorld();
 }
 
@@ -268,7 +279,8 @@ void Object3d::Draw() {
 	// ルートシグネチャの設定
 	cmdList_->SetGraphicsRootSignature(pipelineSet_.rootsignature_.Get());
 	// 定数バッファビューをセット
-	cmdList_->SetGraphicsRootConstantBufferView(0, worldTransform_.constBuff_->GetGPUVirtualAddress());
+	cmdList_->SetGraphicsRootConstantBufferView(0, constBuffB0_->GetGPUVirtualAddress());
+
 	//ライト描画
 	light_->Draw(cmdList_, 3);
 	
@@ -276,9 +288,18 @@ void Object3d::Draw() {
 }
 
 void Object3d::TransferMatrixWorld() {
-	// 定数バッファへデータ転送
-	// 行列の合成
-	worldTransform_.constMap_->mat_ =
-		worldTransform_.matWorld_
-		* camera_->GetViewProjectionMatrix();
+	HRESULT result;
+
+	const Matrix4& matViewProjection = camera_->GetViewProjectionMatrix();
+	const Vector3& cameraPos = camera_->GetEye();
+
+	ConstBufferDataB0* constMap = nullptr;
+	// 定数バッファのマッピング
+	result = constBuffB0_->Map(0, nullptr, (void**)&constMap);
+
+	constMap->viewproj_ = matViewProjection;
+	constMap->world_ = worldTransform_.matWorld_;
+	constMap->cameraPos_ = cameraPos;
+
+	constBuffB0_->Unmap(0, nullptr);
 }
