@@ -22,23 +22,19 @@ using namespace std;
 ID3D12Device* Object3d::device_ = nullptr;
 ID3D12GraphicsCommandList* Object3d::cmdList_ = nullptr;
 ComPtr<ID3D12RootSignature> Object3d::rootsignature_;
-//ComPtr<ID3D12PipelineState> Object3d::pipelinestate_;
 Object3d::PipelineSet Object3d::pipelineSet_;
 
-ViewProjection Object3d::viewProjection_;
+Camera* Object3d::camera_ = nullptr;
 
 Light* Object3d::light_ = nullptr;
 
-void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height) {
+void Object3d::StaticInitialize(ID3D12Device* device,Camera* camera) {
 	// nullptrチェック
 	assert(device);
 
 	Object3d::device_ = device;
 
-	viewProjection_.Initialize();
-
-	// カメラ初期化
-	InitializeCamera(window_width, window_height);
+	camera_ = camera;
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -82,65 +78,6 @@ Object3d* Object3d::Create() {
 	object3d->worldTransform_.scale_ = { scale_val,scale_val,scale_val };
 
 	return object3d;
-}
-
-void Object3d::SetEye(Vector3 eye) {
-	Object3d::viewProjection_.camera_.eye_ = eye;
-
-	UpdateViewMatrix();
-}
-
-void Object3d::SetTarget(Vector3 target) {
-	Object3d::viewProjection_.camera_.target_ = target;
-
-	UpdateViewMatrix();
-}
-
-void Object3d::CameraMoveVector(Vector3 move) {
-	Vector3 eye_moved = GetEye();
-	Vector3 target_moved = GetTarget();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	target_moved.x += move.x;
-	target_moved.y += move.y;
-	target_moved.z += move.z;
-
-	SetEye(eye_moved);
-	SetTarget(target_moved);
-}
-
-void Object3d::CameraMoveEyeVector(Vector3 move) {
-	Vector3 eye_moved = GetEye();
-	Vector3 target_moved = GetTarget();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	SetEye(eye_moved);
-}
-
-void Object3d::InitializeCamera(int window_width, int window_height) {
-	//ビュー行列の計算
-	UpdateViewMatrix();
-
-	Vector4 pers = {
-		1 / (static_cast<float>(tan(viewProjection_.angle_ / 2))) / viewProjection_.aspect_,
-		1 / (static_cast<float>(tan(viewProjection_.angle_ / 2))),
-		1 / (viewProjection_.farClip_ - viewProjection_.nearClip_) * viewProjection_.farClip_,
-		-viewProjection_.nearClip_ / (viewProjection_.farClip_ - viewProjection_.nearClip_) * viewProjection_.farClip_,
-	};
-
-	viewProjection_.matProjection_ = Matrix4Identity();
-	viewProjection_.matProjection_ = {
-		pers.x,0,0,0,
-		0,pers.y,0,0,
-		0,0,pers.z,1,
-		0,0,pers.w,0
-	};
 }
 
 void Object3d::InitializeGraphicsPipeline() {
@@ -294,46 +231,6 @@ void Object3d::InitializeGraphicsPipeline() {
 	assert(SUCCEEDED(result));
 }
 
-void Object3d::UpdateViewMatrix() {
-	//視点座標
-	Vector3 eyePosition = viewProjection_.camera_.eye_;
-	//注視点座標
-	Vector3 targetPosition = viewProjection_.camera_.target_;
-	//(仮の)上方向
-	Vector3 upVector = viewProjection_.camera_.up_;
-
-	Vector3 axisZ = Vector3Normalize(viewProjection_.camera_.target_ - viewProjection_.camera_.eye_);
-	Vector3 axisX = Vector3Normalize(Vector3Cross(viewProjection_.camera_.up_, axisZ));
-	Vector3 axisY = Vector3Cross(axisZ, axisX);
-
-	//カメラ回転行列
-	Matrix4 matCameraRot;
-	//カメラ座標系→ワールド座標系の変換行列0
-	matCameraRot = {
-		axisX.x,axisX.y,axisX.z,0,
-		axisY.x,axisY.y,axisY.z,0,
-		axisZ.x,axisZ.y,axisZ.z,0,
-		0,0,0,1
-	};
-
-	//転置により逆行列(逆回転)を計算
-	viewProjection_.matView_ = Matrix4Transposed(matCameraRot);
-
-	//視点座標に-1を掛けた座標
-	Vector3 reverseEyePosition = eyePosition * -1;
-	//カメラの位置からワールド原点へのベクトル(カメラ座標系)
-	Vector3 cameraMoveVal_ = {
-		Vector3Dot(reverseEyePosition,axisX),
-		Vector3Dot(reverseEyePosition,axisY),
-		Vector3Dot(reverseEyePosition,axisZ)
-	};
-
-	//ビュー行列に平行移動成分を設定
-	viewProjection_.matView_.m[3][0] = cameraMoveVal_.x;
-	viewProjection_.matView_.m[3][1] = cameraMoveVal_.y;
-	viewProjection_.matView_.m[3][2] = cameraMoveVal_.z;
-}
-
 bool Object3d::Initialize() {
 	worldTransform_.Initialize();
 	return true;
@@ -342,50 +239,26 @@ bool Object3d::Initialize() {
 void Object3d::Update() {
 	HRESULT result;
 
-	// ヒーププロパティ
-	D3D12_HEAP_PROPERTIES heapProps{};
-	heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-	// リソース設定
-	D3D12_RESOURCE_DESC resourceDesc{};
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Width = (sizeof(ConstBufferDataB0) + 0xff) & ~0xff;
-	resourceDesc.Height = 1;
-	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.MipLevels = 1;
-	resourceDesc.SampleDesc.Count = 1;
-	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-	// 定数バッファの生成
-	result = device_->CreateCommittedResource(
-		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&constBuffB0_));
-	assert(SUCCEEDED(result));
-
-	const Vector3& cameraPos = viewProjection_.camera_.eye_;
-
-	//ライトの定数バッファへ転送
-	ConstBufferDataB0* constMap = nullptr;
-	result = constBuffB0_->Map(0, nullptr, (void**)&constMap);
-
-	constMap->viewproj_ = viewProjection_.matProjection_;
-	constMap->world_ = worldTransform_.matWorld_;
-	constMap->cameraPos_ = cameraPos;
-	constBuffB0_->Unmap(0, nullptr);
-
-
-	// 定数バッファへデータ転送
-	worldTransform_.Maping();
+	assert(camera_);
 
 	worldTransform_.UpdateMatrix();
 
+	//const Vector3& cameraPos = viewProjection_.camera_.eye_;
+
+	////ライトの定数バッファへ転送
+	//viewProjection_.Maping();
+
+	//viewProjection_.constMap_->projection_ = viewProjection_.matProjection_;
+	//viewProjection_.constMap_->world_ = worldTransform_.matWorld_;
+	//viewProjection_.constMap_->cameraPos_ = cameraPos;
+	//constBuffB0_->Unmap(0, nullptr);
+
+
+	// 定数バッファへデータ転送
 	// 行列の合成
 	worldTransform_.constMap_->mat_ =
 		worldTransform_.matWorld_
-		* viewProjection_.matView_
-		* viewProjection_.matProjection_;
-
-	worldTransform_.constBuff_->Unmap(0, nullptr);
+		* camera_->GetViewProjectionMatrix();
 }
 
 void Object3d::Draw() {
