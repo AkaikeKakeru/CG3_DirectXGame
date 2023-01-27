@@ -25,6 +25,7 @@ GameScene::~GameScene() {
 	safe_delete(model_1);
 
 	safe_delete(light_);
+	safe_delete(camera_);
 
 	//スプライトの解放
 	//safe_delete(sprite1);
@@ -52,6 +53,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
+
+	//カメラ生成
+	camera_ = new Camera();
+	Object3d::SetCamera(camera_);
+
 	// 3Dオブジェクト生成
 	model_1 = Model::LoadFromOBJ("sphere", true);
 	obj_1 = Object3d::Create();

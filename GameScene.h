@@ -8,6 +8,7 @@
 #include "ParticleManager.h"
 #include "DebugText.h"
 #include "Light.h"
+#include "Camera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,6 +53,7 @@ private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
 	DebugText debugText;
+	Camera* camera_ = nullptr;
 	Light* light_ = nullptr;
 
 	/// <summary>
