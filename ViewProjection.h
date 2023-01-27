@@ -31,16 +31,22 @@ public:
 	void Maping();
 
 	//行列の更新
-	void UpdeteMatrix();
+	void UpdateMatrix();
 	//プロジェクション行列更新
 	void UpdateProjectionMatrix();
 	//ビュー行列更新
 	void UpdateViewMatrix();
 
+	//転送
+	void TransferMatrix();
+
 	// ビュー行列
-	Matrix4 matView_ = {};
+	Matrix4 matView_ = Matrix4Identity();
 	// 射影行列
-	Matrix4 matProjection_ = {};
+	Matrix4 matProjection_ = Matrix4Identity();
+
+	//ビュプロジェクション行列
+	Matrix4 matViewProjection_ = Matrix4Identity();
 
 	// ビルボード行列
 	Matrix4 matBillboard_ = Matrix4Identity();

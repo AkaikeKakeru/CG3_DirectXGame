@@ -21,7 +21,8 @@ void ViewProjection::Initialize() {
 
 	CreateConstBuffer();
 	Maping();
-	UpdeteMatrix();
+	UpdateMatrix();
+	TransferMatrix();
 }
 
 void ViewProjection::CreateConstBuffer() {
@@ -56,16 +57,13 @@ void ViewProjection::Maping() {
 	assert(SUCCEEDED(result));
 }
 
-void ViewProjection::UpdeteMatrix() {
+void ViewProjection::UpdateMatrix() {
 	//ビュー行列の計算
 	UpdateViewMatrix();
 	//プロジェクション行列の計算
 	UpdateProjectionMatrix();
 
-	// 定数バッファに書き込み
-	constMap_->view_ = matView_;
-	constMap_->projection_ = matProjection_;
-	constMap_->cameraPos_ = eye_;
+	matViewProjection_ = matView_ * matProjection_;
 }
 
 void ViewProjection::UpdateProjectionMatrix() {
@@ -142,4 +140,11 @@ void ViewProjection::UpdateViewMatrix() {
 		ybillCameraAxisZ.x,ybillCameraAxisZ.y,ybillCameraAxisZ.z,0,
 		0,0,0,1
 	};
+}
+
+void ViewProjection::TransferMatrix() {
+	// 定数バッファに書き込み
+	constMap_->view_ = matView_;
+	constMap_->projection_ = matProjection_;
+	constMap_->cameraPos_ = eye_;
 }
