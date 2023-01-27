@@ -32,13 +32,6 @@ public: // サブクラス
 		ComPtr<ID3D12PipelineState> pipelinestate_;
 	};
 
-	// 定数バッファ用データ構造体B0
-	struct ConstBufferDataB0 {
-		Matrix4 viewproj_;//ビュープロジェクション行列
-		Matrix4 world_;//ワールド行列
-		Vector3 cameraPos_;//カメラ座標(ワールド座標)
-	};
-
 private: // 定数
 
 public: // 静的メンバ関数
@@ -118,8 +111,6 @@ public: // メンバ関数
 	void SetModel(Model* model) { model_ = model; }
 
 private: // メンバ変数
-	ComPtr<ID3D12Resource> constBuffB0_; // 定数バッファ
-
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 
