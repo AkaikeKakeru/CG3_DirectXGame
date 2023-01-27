@@ -90,6 +90,9 @@ public: // メンバ関数
 	// 描画
 	void Draw();
 
+	//転送
+	void TransferMatrixWorld();
+
 	// 座標の取得
 	const Vector3& GetPosition() const { return worldTransform_.position_; }
 

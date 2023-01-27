@@ -253,12 +253,7 @@ void Object3d::Update() {
 	//viewProjection_.constMap_->cameraPos_ = cameraPos;
 	//constBuffB0_->Unmap(0, nullptr);
 
-
-	// 定数バッファへデータ転送
-	// 行列の合成
-	worldTransform_.constMap_->mat_ =
-		worldTransform_.matWorld_
-		* camera_->GetViewProjectionMatrix();
+	TransferMatrixWorld();
 }
 
 void Object3d::Draw() {
@@ -278,4 +273,12 @@ void Object3d::Draw() {
 	light_->Draw(cmdList_, 3);
 	
 	model_->Draw(cmdList_);
+}
+
+void Object3d::TransferMatrixWorld() {
+	// 定数バッファへデータ転送
+	// 行列の合成
+	worldTransform_.constMap_->mat_ =
+		worldTransform_.matWorld_
+		* camera_->GetViewProjectionMatrix();
 }
