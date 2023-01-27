@@ -27,9 +27,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 
 	// スプライト静的初期化
 	Sprite::StaticInitialize(dxCommon->GetDevice(), WinApp::kWindowWidth, WinApp::kWindowHeight);
-	
+
 	// 3Dオブジェクト静的初期化
-	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::kWindowWidth, WinApp::kWindowHeight);
+	Object3d::StaticInitialize(dxCommon->GetDevice());
 	ParticleManager::StaticInitialize(dxCommon->GetDevice(), WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	//ライト静的初期化
