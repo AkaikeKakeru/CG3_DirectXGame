@@ -12,6 +12,7 @@ public://サブクラス
 	struct ConstBufferDataLight {
 		Vector3 lightv_; //ライトへの方向ベクトル
 		Vector3 lightcolor_;//ライトの色
+		unsigned int active_;//有効フラグ
 	};
 
 public://静的メンバ関数
@@ -22,15 +23,6 @@ public://静的メンバ関数
 	static DirectionalLight* Create();
 
 public://メンバ関数
-	void Initialize();
-	void Update();
-	void Draw(ID3D12GraphicsCommandList* cmdList,UINT rootParameterIndex);
-
-	//定数バッファ生成
-	void CreateConstBuffer();
-	//定数バッファへのデータ転送
-	void TransferConstBuffer();
-
 	//ライト方向をセット
 	void SetLightDir(const Vector3& lightdir) {
 		//正規化してセット
@@ -43,6 +35,12 @@ public://メンバ関数
 		lightcolor_ = lightcolor;
 		dirty_ = true;
 	}
+
+	//有効フラグをセット
+	inline bool SetActive(bool active) { active_ = active; }
+
+	//有効チェック
+	inline bool IsActive() { return active_; }
 
 private://静的メンバ変数
 	//デバイス
@@ -57,4 +55,7 @@ private://メンバ変数
 	Vector3 lightcolor_ = { 1,1,1 };
 	//ダーティフラグ
 	bool dirty_ = false;
+
+	//有効フラグ
+	bool active_ = false;
 };
