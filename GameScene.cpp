@@ -64,7 +64,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	obj_1->SetModel(model_1);
 
 	//ライト生成
-	light_ = Light::Create();
+	light_ = DirectionalLight::Create();
 	light_->SetLightColor({ 1,1,1 });
 	Object3d::SetLight(light_);
 }

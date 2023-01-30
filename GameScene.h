@@ -7,14 +7,13 @@
 #include "Object3d.h"
 #include "ParticleManager.h"
 #include "DebugText.h"
-#include "Light.h"
+#include "DirectionalLight.h"
 #include "Camera.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene
-{
+class GameScene {
 private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -54,7 +53,7 @@ private: // メンバ変数
 	Input* input = nullptr;
 	DebugText debugText;
 	Camera* camera_ = nullptr;
-	Light* light_ = nullptr;
+	DirectionalLight* light_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
