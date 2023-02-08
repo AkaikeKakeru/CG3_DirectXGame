@@ -34,6 +34,7 @@ void LightGroup::Initialize() {
 }
 
 void LightGroup::Update() {
+	//値の変更があったら定数バッファへ転送
 	if (dirty_) {
 		TransferConstBuffer();
 		dirty_ = false;
