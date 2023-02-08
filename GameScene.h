@@ -20,6 +20,7 @@ private: // エイリアス
 
 private: // 静的メンバ変数
 	static const int debugTextTexNumber = 0;
+	static const int lightCountNumber = 3;
 
 public: // メンバ関数
 
@@ -61,6 +62,24 @@ private: // メンバ変数
 	Sprite* spriteBG = nullptr;
 	Object3d* obj_1 = nullptr;
 	Model* model_1 = nullptr;
+
+/// <summary>
+/// ライト用
+/// </summary>
+	Vector3 ambientColor_0 = { 1,1,1 };
+
+	//光線方向初期値
+	Vector3 lightDir_[lightCountNumber] = { 
+		{ 0,0,1 },
+		{ 0,1,0 },
+		{ 1,0,0 }
+	};
+	//光色初期値
+	Vector3 lightColor_[lightCountNumber] = { 
+		{ 1,0,0 },
+		{ 0,1,0 },
+		{ 0,0,1 }
+	};
 
 private: // メンバ変数
 	//Sprite* sprite1 = nullptr;

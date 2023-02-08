@@ -69,6 +69,19 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 }
 
 void GameScene::Update() {
+	{
+		lightGroup_->SetAmbientColor(ambientColor_0);
+
+		//lightGroup_->SetDirLightDir(0,lightDir_[0]);
+		//lightGroup_->SetDirLightColor(0,lightColor_[0]);
+
+		//lightGroup_->SetDirLightDir(1,lightDir_[1]);
+		//lightGroup_->SetDirLightColor(1,lightColor_[1]);
+
+		//lightGroup_->SetDirLightDir(2,lightDir_[2]);
+		//lightGroup_->SetDirLightColor(2,lightColor_[2]);
+	}
+
 	// オブジェクト移動
 	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 	{
