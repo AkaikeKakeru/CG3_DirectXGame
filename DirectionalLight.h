@@ -42,7 +42,7 @@ public://メンバ関数
 	}
 
 	//有効フラグをセット
-	inline bool SetActive(bool active) { active_ = active; }
+	inline void SetActive(bool active) { active_ = active; }
 
 	//有効チェック
 	inline bool IsActive() { return active_; }
