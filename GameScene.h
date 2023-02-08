@@ -63,23 +63,36 @@ private: // メンバ変数
 	Object3d* obj_1 = nullptr;
 	Model* model_1 = nullptr;
 
-/// <summary>
-/// ライト用
-/// </summary>
-	Vector3 ambientColor_0 = { 1,1,1 };
+	/// <summary>
+	/// ライト用
+	/// </summary>
+
+	float ambientColor_0[lightCountNumber] = { 1,1,1 };
 
 	//光線方向初期値
-	Vector3 lightDir_[lightCountNumber] = { 
-		{ 0,0,1 },
-		{ 0,1,0 },
-		{ 1,0,0 }
-	};
+	float lightDir_0[lightCountNumber] = { 0,0,1 };
+	float lightDir_1[lightCountNumber] = { 0,1,0 };
+	float lightDir_2[lightCountNumber] = { 1,0,0 };
+
 	//光色初期値
-	Vector3 lightColor_[lightCountNumber] = { 
-		{ 1,0,0 },
-		{ 0,1,0 },
-		{ 0,0,1 }
-	};
+	float lightColor_0[lightCountNumber] = { 1,0,0 };
+	float lightColor_1[lightCountNumber] = { 0,1,0 };
+	float lightColor_2[lightCountNumber] = { 0,0,1 };
+
+	//Vector3 ambientColor_0 = { 1,1,1 };
+
+	////光線方向初期値
+	//Vector3 lightDir_[lightCountNumber] = { 
+	//	{ 0,0,1 },
+	//	{ 0,1,0 },
+	//	{ 1,0,0 }
+	//};
+	////光色初期値
+	//Vector3 lightColor_[lightCountNumber] = { 
+	//	{ 1,0,0 },
+	//	{ 0,1,0 },
+	//	{ 0,0,1 }
+	//};
 
 private: // メンバ変数
 	//Sprite* sprite1 = nullptr;
