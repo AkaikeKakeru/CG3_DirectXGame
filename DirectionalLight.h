@@ -18,6 +18,16 @@ public://サブクラス
 public://静的メンバ関数
 
 public://メンバ関数
+	//ライト方向を取得
+	const Vector3& GetLightDir() const {
+		return lightcolor_;
+	}
+
+	//ライト色を取得
+	const Vector3& GetLightColor() const {
+		return lightdir_;
+	}
+
 	//ライト方向をセット
 	void SetLightDir(const Vector3& lightdir) {
 		//正規化してセット
