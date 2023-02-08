@@ -52,7 +52,7 @@ void LightGroup::CreateConstBuffer() {
 	// リソース設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Width = (sizeof(ConstBufferDataLight) + 0xff) & ~0xff;
+	resourceDesc.Width = (sizeof(ConstBufferData) + 0xff) & ~0xff;
 	resourceDesc.Height = 1;
 	resourceDesc.DepthOrArraySize = 1;
 	resourceDesc.MipLevels = 1;
@@ -70,11 +70,22 @@ void LightGroup::CreateConstBuffer() {
 void LightGroup::TransferConstBuffer() {
 	HRESULT result;
 
-	ConstBufferDataLight* constMap = nullptr;
+	ConstBufferData* constMap = nullptr;
 	result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
-		constMap->lightv_ = -lightdir_;
-		constMap->lightcolor_ = lightcolor_;
-		constBuff_->Unmap(0, nullptr);
+		constMap->ambientColor_ = ambientColor_;
+
+		for (int i = 0; i < DirLightNum; i++) {
+			//ライトが有効なら設定を転送
+			if (dirLights_[i].IsActive()) {
+				constMap->dirLights[i].active_ = 1;
+				constMap->dirLights[i].lightv_ = -dirLights_[i].GetLightDir();
+				constMap->dirLights[i].lightcolor_ = dirLights_[i].GetLightColor();
+			}
+			//ライトが無効なら転送しない
+			else {
+				constMap->dirLights[i].active_ = 0;
+			}
+		}
 	}
 }
