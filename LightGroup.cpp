@@ -104,9 +104,9 @@ void LightGroup::DefaultSetting() {
 	dirLights_[1].SetLightColor({ 1.0f, 1.0f, 1.0f });
 	dirLights_[1].SetLightDir({ +0.5f,+0.1f,+0.2f });
 
-	dirLights_[1].SetActive(true);
-	dirLights_[1].SetLightColor({ 1.0f, 1.0f, 1.0f });
-	dirLights_[1].SetLightDir({ -0.5f,+0.1f,-0.2f });
+	dirLights_[2].SetActive(true);
+	dirLights_[2].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[2].SetLightDir({ -0.5f,+0.1f,-0.2f });
 }
 
 void LightGroup::SetDirLightActive(int index, bool active) {
@@ -114,13 +114,13 @@ void LightGroup::SetDirLightActive(int index, bool active) {
 	dirLights_[index].SetActive(active);
 }
 
-void LightGroup::SetLightDir(int index, const Vector3& lightdir) {
+void LightGroup::SetDirLightDir(int index, const Vector3& lightdir) {
 	assert(0 <= index && index < DirLightNum);
 	dirLights_[index].SetLightDir(lightdir);
 	dirty_ = true;
 }
 
-void LightGroup::SetLightColor(int index, const Vector3& lightcolor) {
+void LightGroup::SetDirLightColor(int index, const Vector3& lightcolor) {
 	assert(0 <= index && index < DirLightNum);
 	dirLights_[index].SetLightColor(lightcolor);
 	dirty_ = true;

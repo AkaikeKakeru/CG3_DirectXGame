@@ -53,10 +53,10 @@ public://メンバ関数
 	void SetDirLightActive(int index, bool active);
 
 	//ライト方向をセット
-	void SetLightDir(int index, const Vector3& lightdir);
+	void SetDirLightDir(int index, const Vector3& lightdir);
 
 	//ライト色をセット
-	void SetLightColor(int index, const Vector3& lightcolor);
+	void SetDirLightColor(int index, const Vector3& lightcolor);
 
 private://静的メンバ変数
 	//デバイス
