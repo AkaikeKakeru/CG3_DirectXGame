@@ -89,3 +89,20 @@ void LightGroup::TransferConstBuffer() {
 		}
 	}
 }
+
+void LightGroup::SetDirLightActive(int index, bool active) {
+	assert(0 <= index && index < DirLightNum);
+	dirLights_[index].SetActive(active);
+}
+
+void LightGroup::SetLightDir(int index, const Vector3& lightdir) {
+	assert(0 <= index && index < DirLightNum);
+	dirLights_[index].SetLightDir(lightdir);
+	dirty_ = true;
+}
+
+void LightGroup::SetLightColor(int index, const Vector3& lightcolor) {
+	assert(0 <= index && index < DirLightNum);
+	dirLights_[index].SetLightColor(lightcolor);
+	dirty_ = true;
+}

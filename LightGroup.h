@@ -39,18 +39,21 @@ public://メンバ関数
 	//定数バッファへのデータ転送
 	void TransferConstBuffer();
 
-	////ライト方向をセット
-	//void SetLightDir(const Vector3& lightdir) {
-	//	//正規化してセット
-	//	lightdir_ = Vector3Normalize(lightdir);
-	//	dirty_ = true;
-	//}
 
-	////ライト色をセット
-	//void SetLightColor(const Vector3& lightcolor) {
-	//	lightcolor_ = lightcolor;
-	//	dirty_ = true;
-	//}
+	//環境光のライト色をセット
+	void SetAmbientColor(const Vector3& color) {
+		ambientColor_ = color;
+		dirty_ = true;
+	}
+
+	//平行光源の有効フラグをセット
+	void SetDirLightActive(int index, bool active);
+
+	//ライト方向をセット
+	void SetLightDir(int index, const Vector3& lightdir);
+
+	//ライト色をセット
+	void SetLightColor(int index, const Vector3& lightcolor);
 
 private://静的メンバ変数
 	//デバイス
