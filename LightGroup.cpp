@@ -92,6 +92,8 @@ void LightGroup::TransferConstBuffer() {
 				constMap->dirLights[i].active_ = 0;
 			}
 		}
+
+		constBuff_->Unmap(0, nullptr);
 	}
 }
 
