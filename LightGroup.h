@@ -39,18 +39,18 @@ public://メンバ関数
 	//定数バッファへのデータ転送
 	void TransferConstBuffer();
 
-	//ライト方向をセット
-	void SetLightDir(const Vector3& lightdir) {
-		//正規化してセット
-		lightdir_ = Vector3Normalize(lightdir);
-		dirty_ = true;
-	}
+	////ライト方向をセット
+	//void SetLightDir(const Vector3& lightdir) {
+	//	//正規化してセット
+	//	lightdir_ = Vector3Normalize(lightdir);
+	//	dirty_ = true;
+	//}
 
-	//ライト色をセット
-	void SetLightColor(const Vector3& lightcolor) {
-		lightcolor_ = lightcolor;
-		dirty_ = true;
-	}
+	////ライト色をセット
+	//void SetLightColor(const Vector3& lightcolor) {
+	//	lightcolor_ = lightcolor;
+	//	dirty_ = true;
+	//}
 
 private://静的メンバ変数
 	//デバイス
@@ -59,10 +59,10 @@ private://静的メンバ変数
 private://メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuff_;
-	//ライト光線方向(単位ベクトル)
-	Vector3 lightdir_ = { 1,0,0 };
-	//ライト色
-	Vector3 lightcolor_ = { 1,1,1 };
+	//環境光の色
+	Vector3 ambientColor_ = { 1,1,1 };
+	//平行光源の配列
+	DirectionalLight dirLights_[DirLightNum];
 	//ダーティフラグ
 	bool dirty_ = false;
 };
