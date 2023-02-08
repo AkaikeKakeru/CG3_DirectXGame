@@ -25,7 +25,11 @@ LightGroup* LightGroup::Create() {
 }
 
 void LightGroup::Initialize() {
+	//標準のライトの設定
+	DefaultSetting();
+	//定数バッファ生成
 	CreateConstBuffer();
+	//定数バッファへ転送
 	TransferConstBuffer();
 }
 
@@ -88,6 +92,20 @@ void LightGroup::TransferConstBuffer() {
 			}
 		}
 	}
+}
+
+void LightGroup::DefaultSetting() {
+	dirLights_[0].SetActive(true);
+	dirLights_[0].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[0].SetLightDir({ 0.0f,-1.0f,0.0f });
+
+	dirLights_[1].SetActive(true);
+	dirLights_[1].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[1].SetLightDir({ +0.5f,+0.1f,+0.2f });
+
+	dirLights_[1].SetActive(true);
+	dirLights_[1].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[1].SetLightDir({ -0.5f,+0.1f,-0.2f });
 }
 
 void LightGroup::SetDirLightActive(int index, bool active) {
