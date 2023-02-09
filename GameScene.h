@@ -79,20 +79,10 @@ private: // メンバ変数
 	float lightColor_1[lightCountNumber] = { 0,1,0 };
 	float lightColor_2[lightCountNumber] = { 0,0,1 };
 
-	//Vector3 ambientColor_0 = { 1,1,1 };
-
-	////光線方向初期値
-	//Vector3 lightDir_[lightCountNumber] = { 
-	//	{ 0,0,1 },
-	//	{ 0,1,0 },
-	//	{ 1,0,0 }
-	//};
-	////光色初期値
-	//Vector3 lightColor_[lightCountNumber] = { 
-	//	{ 1,0,0 },
-	//	{ 0,1,0 },
-	//	{ 0,0,1 }
-	//};
+	//点光源初期値
+	float pointLightPos_[3] = { 0,0,0 };
+	float pointLightColor_[3] = { 1,1,1 };
+	float pointLightAtten_[3] = { 0.3f,0.1f,0.1f };
 
 private: // メンバ変数
 	//Sprite* sprite1 = nullptr;

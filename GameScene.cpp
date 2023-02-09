@@ -67,51 +67,38 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//ライト生成
 	lightGroup_ = LightGroup::Create();
 	Object3d::SetLight(lightGroup_);
+
+	{
+		lightGroup_->SetPointLightActive(0, false);
+		lightGroup_->SetPointLightActive(1, false);
+		lightGroup_->SetPointLightActive(2, false);
+
+		lightGroup_->SetPointLightActive(0, true);
+		pointLightPos_[0] = 0.5f;
+		pointLightPos_[1] = 1.0f;
+		pointLightPos_[2] = 0.0f;
+	}
 }
 
 void GameScene::Update() {
 	{
-		lightGroup_->SetAmbientColor({
-			ambientColor_0[0],
-			ambientColor_0[1],
-			ambientColor_0[2],});
+		lightGroup_->SetPointLightPos(0, { 
+			pointLightPos_[0],
+			pointLightPos_[1],
+			pointLightPos_[2]
+			});
 
-		lightGroup_->SetDirLightDir(0,{ 
-			lightDir_0[0],
-			lightDir_0[1],
-			lightDir_0[2],});
-		lightGroup_->SetDirLightDir(1,{ 
-			lightDir_1[0],
-			lightDir_1[1],
-			lightDir_1[2],});
-		lightGroup_->SetDirLightDir(2,{ 
-			lightDir_2[0],
-			lightDir_2[1],
-			lightDir_2[2],});
+		lightGroup_->SetPointLightColor(0, { 
+			pointLightColor_[0],
+			pointLightColor_[1],
+			pointLightColor_[2]
+			});
 
-		lightGroup_->SetDirLightColor(0,{ 
-			lightColor_0[0],
-			lightColor_0[1],
-			lightColor_0[2],});
-		lightGroup_->SetDirLightColor(1,{ 
-			lightColor_1[0],
-			lightColor_1[1],
-			lightColor_1[2],});
-		lightGroup_->SetDirLightColor(2,{ 
-			lightColor_2[0],
-			lightColor_2[1],
-			lightColor_2[2],});
-
-		//lightGroup_->SetAmbientColor(ambientColor_0);
-
-		//lightGroup_->SetDirLightDir(0,lightDir_[0]);
-		//lightGroup_->SetDirLightColor(0,lightColor_[0]);
-
-		//lightGroup_->SetDirLightDir(1,lightDir_[1]);
-		//lightGroup_->SetDirLightColor(1,lightColor_[1]);
-
-		//lightGroup_->SetDirLightDir(2,lightDir_[2]);
-		//lightGroup_->SetDirLightColor(2,lightColor_[2]);
+		lightGroup_->SetPointLightAtten(0, { 
+			pointLightAtten_[0],
+			pointLightAtten_[1],
+			pointLightAtten_[2]
+			});
 	}
 
 	// オブジェクト移動
@@ -161,16 +148,9 @@ void GameScene::Draw() {
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 200));
 
-	ImGui::ColorEdit3("ambientColor", ambientColor_0, ImGuiColorEditFlags_Float);
-	
-	ImGui::InputFloat3("lightDir0", lightDir_0);
-	ImGui::ColorEdit3("lightColor0", lightColor_0, ImGuiColorEditFlags_Float);
-	
-	ImGui::InputFloat3("lightDir1", lightDir_1);
-	ImGui::ColorEdit3("lightColor1", lightColor_1, ImGuiColorEditFlags_Float);
-	
-	ImGui::InputFloat3("lightDir2", lightDir_2);
-	ImGui::ColorEdit3("lightColor2", lightColor_2, ImGuiColorEditFlags_Float);
+	ImGui::ColorEdit3("pointLightColor", pointLightColor_, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("pointLightPos", pointLightPos_);
+	ImGui::InputFloat3("pointLightAtten", pointLightAtten_);
 
 	ImGui::End();
 #pragma endregion
