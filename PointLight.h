@@ -23,7 +23,7 @@ public: //メンバ関数
 	inline const Vector3& GetLightAtten() {
 		return lightAtten_;
 	}
-	inline bool GetActive() {
+	inline bool IsActive() {
 		return active_;
 	}
 
