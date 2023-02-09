@@ -225,5 +225,8 @@
     <ClInclude Include="LightGroup.h">
       <Filter>ヘッダー ファイル\3d\Light</Filter>
     </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>ヘッダー ファイル\3d\Light</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
