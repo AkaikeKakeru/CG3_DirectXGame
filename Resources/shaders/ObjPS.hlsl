@@ -16,7 +16,8 @@ float4 main(VSOutput input) : SV_TARGET{
 	//シェーディングによる色
 	float4 shadecolor = float4(ambientColor * ambient, m_alpha);
 
-	for (int i = 0; i < DIR_LIGHT_NUM; i++) {
+	//平行光源
+	for (int i = 0; i < DIRLIGHT_NUM; i++) {
 		if (dirLights[i].active) {
 			//ライトに向かうベクトルと法線の内積
 			float3 dotlightnormal = dot(dirLights[i].lightv, input.normal);
@@ -35,5 +36,34 @@ float4 main(VSOutput input) : SV_TARGET{
 		}
 	}
 
+	//点光源
+	for ( i = 0;  i <  POINTLIGHT_NUM;  i++ ) {
+		if (pointLights[i].active) {
+			//ライトへのベクトル
+			float3 lightv = pointLight[i].lightpos - input.worldpos.xyz;
+			//ベクトルの長さ
+			float d = length(lightv);
+			//距離減衰係数
+			float atten = 1.0f / (pointLights[i].lightatten.x + pointLights[i].lightatten.y * d +
+				pointLight[i].lightatten.z * d * d);
+
+			//ライトに向かうベクトルと法線の内積
+			float3 dotlightnormal = dot(lightv, input.normal);
+			//反射光ベクトル
+			float3 reflect = normalize(lightv + 2 * dotlightnormal * input.normal);
+
+			//拡散反射光
+			float3 diffuse = dotlightnormal * m_diffuse;
+			//鏡面反射光
+			float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
+
+			//phong
+			//全て加算
+			shadecolor.rgb += atten * (diffuse + specular) * pointLights[i].lightcolor;
+			shadecolor.a += m_alpha;
+		}
+	}
+
+	//シェーディングによる色で描画
 	return shadecolor * texcolor;
 }

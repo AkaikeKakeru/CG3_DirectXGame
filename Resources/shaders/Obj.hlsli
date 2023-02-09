@@ -11,7 +11,8 @@ cbuffer cbuff1 : register(b1) {
 	float m_alpha : packoffset(c2.w); //アルファ
 }
 
-static const uint DIR_LIGHT_NUM = 3;
+static const int DIRLIGHT_NUM = 3;
+static const int POINTLIGHT_NUM
 
 struct DirLight {
 	float3 lightv;//ライトへの方向の単位ベクトル
@@ -19,9 +20,17 @@ struct DirLight {
 	uint active;
 };
 
+struct PointLight {
+	float3 lightpos;//ライト座標
+	float3 lightcolor;//ライトの色(RGB)
+	float lightatten;//ライト距離減衰係数
+	uint active;
+};
+
 cbuffer cbuff2 : register(b2) {
 	float3 ambientColor;
-	DirLight dirLights[DIR_LIGHT_NUM];
+	DirLight dirLights[DIRLIGHT_NUM];
+	PointLight pointLights[POINTLIGHT_NUM];
 }
 
 //頂点シェーダからピクセルシェーダへの出力
