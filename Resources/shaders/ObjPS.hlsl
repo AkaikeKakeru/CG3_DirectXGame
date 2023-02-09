@@ -40,12 +40,14 @@ float4 main(VSOutput input) : SV_TARGET{
 	for ( i = 0;  i <  POINTLIGHT_NUM;  i++ ) {
 		if (pointLights[i].active) {
 			//ライトへのベクトル
-			float3 lightv = pointLight[i].lightpos - input.worldpos.xyz;
+			float3 lightv = pointLights[i].lightpos - input.worldpos.xyz;
 			//ベクトルの長さ
 			float d = length(lightv);
+			//正規化
+			lightv = normalize(lightv);
 			//距離減衰係数
 			float atten = 1.0f / (pointLights[i].lightatten.x + pointLights[i].lightatten.y * d +
-				pointLight[i].lightatten.z * d * d);
+				pointLights[i].lightatten.z * d * d);
 
 			//ライトに向かうベクトルと法線の内積
 			float3 dotlightnormal = dot(lightv, input.normal);
