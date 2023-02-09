@@ -3,6 +3,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "DirectionalLight.h"
+#include "PointLight.h"
 
 class LightGroup {
 private: // エイリアス
@@ -10,16 +11,21 @@ private: // エイリアス
 	template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public://定数
-	static const int DirLightNum = 3;
+	//平行光源の数
+	static const int DirLightNum_ = 3;
+	//点光源の数
+	static const int PointLightNum_ = 3;
 
 public://サブクラス
 	//定数バッファ用データ構造体
 	struct ConstBufferData {
 		//環境光の色
 		Vector3 ambientColor_;
-		float pad1;
+		float pad1_;
 		//平行光源用
-		DirectionalLight::ConstBufferData dirLights[DirLightNum];
+		DirectionalLight::ConstBufferData dirLights_[DirLightNum_];
+		//点光源用
+		PointLight::ConstbufferData pointLights_[PointLightNum_];
 	};
 
 public://静的メンバ関数
@@ -58,6 +64,20 @@ public://メンバ関数
 	//ライト色をセット
 	void SetDirLightColor(int index, const Vector3& lightcolor);
 
+
+	//点光源の有効フラグをセット
+	void SetPointLightActive(int index, bool active);
+
+	//ライト座標をセット
+	void SetPointLightPos(int index, const Vector3& lightpos);
+
+	//ライト色をセット
+	void SetPointLightColor(int index, const Vector3& lightcolor);
+	
+	//ライト距離減衰係数をセット
+	void SetPointLightAtten(int index, const Vector3& lightAtten);
+
+
 private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
@@ -68,7 +88,9 @@ private://メンバ変数
 	//環境光の色
 	Vector3 ambientColor_ = { 1,1,1 };
 	//平行光源の配列
-	DirectionalLight dirLights_[DirLightNum];
+	DirectionalLight dirLights_[DirLightNum_];
+	//点光源の配列
+	PointLight pointLights_[PointLightNum_];
 	//ダーティフラグ
 	bool dirty_ = false;
 };

@@ -78,18 +78,35 @@ void LightGroup::TransferConstBuffer() {
 	ConstBufferData* constMap = nullptr;
 	result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
+		//環境光
 		constMap->ambientColor_ = ambientColor_;
 
-		for (int i = 0; i < DirLightNum; i++) {
+		//平行光源
+		for (int i = 0; i < DirLightNum_; i++) {
 			//ライトが有効なら設定を転送
 			if (dirLights_[i].IsActive()) {
-				constMap->dirLights[i].active_ = 1;
-				constMap->dirLights[i].lightv_ = -dirLights_[i].GetLightDir();
-				constMap->dirLights[i].lightcolor_ = dirLights_[i].GetLightColor();
+				constMap->dirLights_[i].active_ = 1;
+				constMap->dirLights_[i].lightv_ = -dirLights_[i].GetLightDir();
+				constMap->dirLights_[i].lightcolor_ = dirLights_[i].GetLightColor();
 			}
 			//ライトが無効なら転送しない
 			else {
-				constMap->dirLights[i].active_ = 0;
+				constMap->dirLights_[i].active_ = 0;
+			}
+		}
+
+		//平行光源
+		for (int i = 0; i < PointLightNum_; i++) {
+			//ライトが有効なら設定を転送
+			if (pointLights_[i].IsActive()) {
+				constMap->pointLights_[i].active_ = 1;
+				constMap->pointLights_[i].lightpos_ = pointLights_[i].GetLightPos();
+				constMap->pointLights_[i].lightcolor_ = pointLights_[i].GetLightColor();
+				constMap->pointLights_[i].lightatten_ = pointLights_[i].GetLightAtten();
+			}
+			//ライトが無効なら転送しない
+			else {
+				constMap->pointLights_[i].active_ = 0;
 			}
 		}
 
@@ -112,18 +129,41 @@ void LightGroup::DefaultSetting() {
 }
 
 void LightGroup::SetDirLightActive(int index, bool active) {
-	assert(0 <= index && index < DirLightNum);
+	assert(0 <= index && index < DirLightNum_);
 	dirLights_[index].SetActive(active);
 }
 
 void LightGroup::SetDirLightDir(int index, const Vector3& lightdir) {
-	assert(0 <= index && index < DirLightNum);
+	assert(0 <= index && index < DirLightNum_);
 	dirLights_[index].SetLightDir(lightdir);
 	dirty_ = true;
 }
 
 void LightGroup::SetDirLightColor(int index, const Vector3& lightcolor) {
-	assert(0 <= index && index < DirLightNum);
+	assert(0 <= index && index < DirLightNum_);
 	dirLights_[index].SetLightColor(lightcolor);
+	dirty_ = true;
+}
+
+void LightGroup::SetPointLightActive(int index, bool active) {
+	assert(0 <= index && index < PointLightNum_);
+	pointLights_[index].SetActive(active);
+}
+
+void LightGroup::SetPointLightPos(int index, const Vector3& lightpos) {
+	assert(0 <= index && index < PointLightNum_);
+	pointLights_[index].SetLightPos(lightpos);
+	dirty_ = true;
+}
+
+void LightGroup::SetPointLightColor(int index, const Vector3& lightcolor) {
+	assert(0 <= index && index < PointLightNum_);
+	pointLights_[index].SetLightColor(lightcolor);
+	dirty_ = true;
+}
+
+void LightGroup::SetPointLightAtten(int index, const Vector3& lightAtten) {
+	assert(0 <= index && index < PointLightNum_);
+	pointLights_[index].SetLightAtten(lightAtten);
 	dirty_ = true;
 }
