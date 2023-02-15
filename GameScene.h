@@ -63,6 +63,21 @@ private: // メンバ変数
 	Object3d* obj_1 = nullptr;
 	Model* model_1 = nullptr;
 
+	///ライト用
+	float ambientColor_[3] = { 1,1,1 };
+
+	//光線方向初期値
+	float lightDir_[3][3] = {
+		{0,0,1},
+		{0,1,0},
+		{1,0,0}
+	};
+	//光線色初期値
+	float lightColor_[3][3] = {
+		{1,0,0},
+		{0,1,0},
+		{0,0,1}
+	};
 private: // メンバ変数
 	//Sprite* sprite1 = nullptr;
 	//Sprite* sprite2 = nullptr;
