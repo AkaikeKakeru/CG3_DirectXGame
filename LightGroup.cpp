@@ -13,3 +13,14 @@ void LightGroup::StaticInitialize(ID3D12Device* device) {
 	//静的メンバ変数セット
 	LightGroup::device_ = device;
 }
+
+void LightGroup::Initialize() {
+	CreateConstBuffer();
+	TransferConstBuffer();
+}
+
+void LightGroup::CreateConstBuffer() {
+}
+
+void LightGroup::TransferConstBuffer() {
+}
