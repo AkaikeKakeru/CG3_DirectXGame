@@ -26,7 +26,7 @@ Object3d::PipelineSet Object3d::pipelineSet_;
 
 Camera* Object3d::camera_ = nullptr;
 
-DirectionalLight* Object3d::light_ = nullptr;
+LightGroup* Object3d::lightGroup_ = nullptr;
 
 void Object3d::StaticInitialize(ID3D12Device* device,Camera* camera) {
 	// nullptrチェック
@@ -260,8 +260,8 @@ void Object3d::Draw() {
 	// 定数バッファビューをセット
 	cmdList_->SetGraphicsRootConstantBufferView(0, worldTransform_.constBuff_->GetGPUVirtualAddress());
 
-	//ライト描画
-	light_->Draw(cmdList_, 3);
+	//ライトグループ描画
+	lightGroup_->Draw(cmdList_, 3);
 	
 	model_->Draw(cmdList_);
 }
