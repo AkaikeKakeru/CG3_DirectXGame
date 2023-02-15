@@ -111,6 +111,9 @@
     <ClCompile Include="DirectionalLight.cpp">
       <Filter>ソース ファイル\3d\Light</Filter>
     </ClCompile>
+    <ClCompile Include="LightGroup.cpp">
+      <Filter>ソース ファイル\3d\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
@@ -205,6 +208,9 @@
       <Filter>ヘッダー ファイル\3d\Camera</Filter>
     </ClInclude>
     <ClInclude Include="DirectionalLight.h">
+      <Filter>ヘッダー ファイル\3d\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="LightGroup.h">
       <Filter>ヘッダー ファイル\3d\Light</Filter>
     </ClInclude>
   </ItemGroup>
