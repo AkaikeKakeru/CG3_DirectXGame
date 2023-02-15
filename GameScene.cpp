@@ -24,7 +24,7 @@ GameScene::~GameScene() {
 	safe_delete(obj_1);
 	safe_delete(model_1);
 
-	safe_delete(light_);
+	safe_delete(lightGroup_);
 	safe_delete(camera_);
 
 	//スプライトの解放
@@ -64,9 +64,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	obj_1->SetModel(model_1);
 
 	//ライト生成
-	light_ = DirectionalLight::Create();
-	light_->SetLightColor({ 1,1,1 });
-	Object3d::SetLight(light_);
+	lightGroup_ = LightGroup::Create();
+	Object3d::SetLightGroup(lightGroup_);
 }
 
 void GameScene::Update() {
@@ -106,21 +105,21 @@ void GameScene::Update() {
 		obj_1->SetRotation(rot);
 	}
 
-	{
-		static Vector3 lightDir = { 0,1,5 };
+	//{
+	//	static Vector3 lightDir = { 0,1,5 };
 
-		if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A)) {
-			if (input->PushKey(DIK_W)) { lightDir.y += 1.0f; }
-			else if (input->PushKey(DIK_S)) {lightDir.y -= 1.0f; }
-			if (input->PushKey(DIK_D)) { lightDir.x += 1.0f; }
-			else if (input->PushKey(DIK_A)) { lightDir.x -= 1.0f; }
-		}
+	//	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A)) {
+	//		if (input->PushKey(DIK_W)) { lightDir.y += 1.0f; }
+	//		else if (input->PushKey(DIK_S)) {lightDir.y -= 1.0f; }
+	//		if (input->PushKey(DIK_D)) { lightDir.x += 1.0f; }
+	//		else if (input->PushKey(DIK_A)) { lightDir.x -= 1.0f; }
+	//	}
 
-		light_->SetLightDir(lightDir);
+	//	light_->SetLightDir(lightDir);
 
-	}
+	//}
 
-	light_->Update();
+	lightGroup_->Update();
 	obj_1->Update();
 }
 

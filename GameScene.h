@@ -7,7 +7,7 @@
 #include "Object3d.h"
 #include "ParticleManager.h"
 #include "DebugText.h"
-#include "DirectionalLight.h"
+#include "LightGroup.h"
 #include "Camera.h"
 
 /// <summary>
@@ -54,7 +54,7 @@ private: // メンバ変数
 	Input* input = nullptr;
 	DebugText debugText;
 	Camera* camera_ = nullptr;
-	DirectionalLight* light_ = nullptr;
+	LightGroup* lightGroup_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
