@@ -23,12 +23,13 @@ public://サブクラス
 	};
 
 public://静的メンバ関数
-	//デバイス
-	static ComPtr<ID3D12Device> device_;
+	void StaticInitialize(ID3D12Device* device);
 
 public://メンバ関数
 	
 private://静的メンバ変数
+	//デバイス
+	static ComPtr<ID3D12Device> device_;
 
 private://メンバ変数
 };
