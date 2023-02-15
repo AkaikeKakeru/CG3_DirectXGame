@@ -9,7 +9,7 @@ private: // エイリアス
 	template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public://サブクラス
-	struct ConstBufferDataLight {
+	struct ConstBufferData{
 		Vector3 lightv_; //ライトへの方向ベクトル
 		Vector3 lightcolor_;//ライトの色
 		unsigned int active_;//有効フラグ
