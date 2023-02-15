@@ -22,9 +22,9 @@ public://サブクラス
 		DirectionalLight::ConstBufferData dirLights_[DirLightNum_];
 	};
 
-
 public://静的メンバ関数
-
+	//デバイス
+	static ComPtr<ID3D12Device> device_;
 
 public://メンバ関数
 	
