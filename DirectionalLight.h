@@ -12,6 +12,7 @@ public://サブクラス
 	struct ConstBufferDataLight {
 		Vector3 lightv_; //ライトへの方向ベクトル
 		Vector3 lightcolor_;//ライトの色
+		unsigned int active_;//有効フラグ
 	};
 
 public://静的メンバ関数
@@ -44,6 +45,12 @@ public://メンバ関数
 		dirty_ = true;
 	}
 
+	//有効フラグをセット
+	inline void SetActive(bool active) { active_ = active; }
+
+	//有効チェック
+	inline bool IsActive() { return active_; }
+
 private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
@@ -57,4 +64,6 @@ private://メンバ変数
 	Vector3 lightcolor_ = { 1,1,1 };
 	//ダーティフラグ
 	bool dirty_ = false;
+	//有効フラグ
+	bool active_ = false;
 };
