@@ -33,6 +33,16 @@ public://メンバ関数
 	void TransferConstBuffer();
 
 	//ライト方向をセット
+	const Vector3& GetLightDir() {
+		return lightdir_;
+	}
+
+	//ライト色をセット
+	const Vector3&  GetLightColor() {
+		return lightcolor_;
+	}
+
+	//ライト方向をセット
 	void SetLightDir(const Vector3& lightdir) {
 		//正規化してセット
 		lightdir_ = Vector3Normalize(lightdir);
