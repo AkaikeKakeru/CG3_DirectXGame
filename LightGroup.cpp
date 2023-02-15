@@ -21,6 +21,14 @@ void LightGroup::Initialize() {
 	TransferConstBuffer();
 }
 
+void LightGroup::Update() {
+	//値の更新があったときだけ定数バッファに転送
+	if (dirty_) {
+		TransferConstBuffer();
+		dirty_ = false;
+	}
+}
+
 void LightGroup::CreateConstBuffer() {
 	HRESULT result;
 

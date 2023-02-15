@@ -27,6 +27,7 @@ public://静的メンバ関数
 
 public://メンバ関数
 	void Initialize();
+	void Update();
 
 	//定数バッファ生成
 	void CreateConstBuffer();
