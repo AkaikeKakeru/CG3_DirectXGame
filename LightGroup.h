@@ -33,7 +33,8 @@ public://メンバ関数
 	//定数バッファへのデータ転送
 	void TransferConstBuffer();
 
-
+	//標準のライト設定
+	void DefaultLightSetting();
 
 	//環境光色をセット
 	void SetAmbientColor(const Vector3& color) {

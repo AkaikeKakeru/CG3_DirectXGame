@@ -16,6 +16,7 @@ void LightGroup::StaticInitialize(ID3D12Device* device) {
 }
 
 void LightGroup::Initialize() {
+	DefaultLightSetting();
 	CreateConstBuffer();
 	TransferConstBuffer();
 }
@@ -68,6 +69,20 @@ void LightGroup::TransferConstBuffer() {
 
 		constBuff_->Unmap(0, nullptr);
 	}
+}
+
+void LightGroup::DefaultLightSetting() {
+	dirLights_[0].SetActive(true);
+	dirLights_[0].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[0].SetLightDir({ 0.0f,-1.0f,0.0f });
+
+	dirLights_[1].SetActive(true);
+	dirLights_[1].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[1].SetLightDir({ +0.5f,+0.1f,+0.2f });
+
+	dirLights_[2].SetActive(true);
+	dirLights_[2].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[2].SetLightDir({ -0.5f,+0.1f,-0.2f });
 }
 
 //有効フラグをセット
