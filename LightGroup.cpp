@@ -29,6 +29,13 @@ void LightGroup::Update() {
 	}
 }
 
+void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList,
+	UINT rootParameterIndex) {
+	//定数バッファビューをセット
+	cmdList->SetGraphicsRootConstantBufferView(
+		rootParameterIndex, constBuff_->GetGPUVirtualAddress());
+}
+
 void LightGroup::CreateConstBuffer() {
 	HRESULT result;
 
