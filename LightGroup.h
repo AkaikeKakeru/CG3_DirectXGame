@@ -32,4 +32,12 @@ private://静的メンバ変数
 	static ComPtr<ID3D12Device> device_;
 
 private://メンバ変数
+	//定数バッファ
+	ComPtr<ID3D12Resource> constBuff_;
+	//環境光色
+	Vector3 ambientColor_ = { 1,1,1 };
+	//平行光源の配列
+	DirectionalLight dirLights_[DirLightNum_];
+	//ダーティフラグ
+	bool dirty_ = false;
 };
