@@ -25,6 +25,9 @@ public://サブクラス
 public://静的メンバ関数
 	void StaticInitialize(ID3D12Device* device);
 
+	//生成
+	static LightGroup* Create();
+
 public://メンバ関数
 	void Initialize();
 	void Update();

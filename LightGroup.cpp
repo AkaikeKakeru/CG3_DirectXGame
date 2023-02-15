@@ -15,6 +15,12 @@ void LightGroup::StaticInitialize(ID3D12Device* device) {
 	LightGroup::device_ = device;
 }
 
+LightGroup* LightGroup::Create() {
+	LightGroup* instance = new LightGroup();
+	instance->Initialize();
+	return instance;
+}
+
 void LightGroup::Initialize() {
 	DefaultLightSetting();
 	CreateConstBuffer();
