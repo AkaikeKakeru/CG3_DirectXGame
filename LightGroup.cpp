@@ -46,4 +46,26 @@ void LightGroup::CreateConstBuffer() {
 }
 
 void LightGroup::TransferConstBuffer() {
+	HRESULT result;
+
+	ConstBufferData* constMap = nullptr;
+	result = constBuff_->Map(0, nullptr, (void**)&constMap);
+	if (SUCCEEDED(result)) {
+		constMap->ambientColor_ = ambientColor_;
+
+		for (size_t i = 0; i < DirLightNum_; i++) {
+			//ライトが有効なら設定を転送
+			if (dirLights_[i].IsActive()) {
+				constMap->dirLights_[i].active_ = 1;
+				constMap->dirLights_[i].lightv_ = -dirLights_[i].GetLightDir();
+				constMap->dirLights_[i].lightcolor_ = dirLights_[i].GetLightColor();
+			}
+			//ライトが無効なら転送しない
+			else {
+				constMap->dirLights_[i].active_ = 0;
+			}
+		}
+
+		constBuff_->Unmap(0, nullptr);
+	}
 }
