@@ -1,48 +1,48 @@
-#include "Light.h"
+#include "DirectionalLight.h"
 #include <cassert>
 #include "DirectXCommon.h"
 //省略
 template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-ComPtr<ID3D12Device> Light::device_ = nullptr;
+ComPtr<ID3D12Device> DirectionalLight::device_ = nullptr;
 
-void Light::StaticInitialize(ID3D12Device* device) {
+void DirectionalLight::StaticInitialize(ID3D12Device* device) {
 	//再初期化チェック
-	assert(!Light::device_);
+	assert(!DirectionalLight::device_);
 	//nullptrチェック
 	assert(device);
 
 	//静的メンバ変数セット
-	Light::device_ = device;
+	DirectionalLight::device_ = device;
 }
 
-Light* Light::Create() {
-	Light* light = new Light();
+DirectionalLight* DirectionalLight::Create() {
+	DirectionalLight* light = new DirectionalLight();
 
 	light->Initialize();
 
 	return light;
 }
 
-void Light::Initialize() {
+void DirectionalLight::Initialize() {
 	CreateConstBuffer();
 	TransferConstBuffer();
 }
 
-void Light::Update() {
+void DirectionalLight::Update() {
 	if (dirty_) {
 		TransferConstBuffer();
 		dirty_ = false;
 	}
 }
 
-void Light::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex) {
+void DirectionalLight::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex) {
 	cmdList->SetGraphicsRootConstantBufferView(
 		rootParameterIndex, constBuff_->GetGPUVirtualAddress());
 }
 
 
-void Light::CreateConstBuffer() {
+void DirectionalLight::CreateConstBuffer() {
 	HRESULT result;
 
 	// ヒーププロパティ
@@ -67,7 +67,7 @@ void Light::CreateConstBuffer() {
 	assert(SUCCEEDED(result));
 }
 
-void Light::TransferConstBuffer() {
+void DirectionalLight::TransferConstBuffer() {
 	HRESULT result;
 
 	ConstBufferDataLight* constMap = nullptr;

@@ -26,7 +26,7 @@ Object3d::PipelineSet Object3d::pipelineSet_;
 
 Camera* Object3d::camera_ = nullptr;
 
-Light* Object3d::light_ = nullptr;
+DirectionalLight* Object3d::light_ = nullptr;
 
 void Object3d::StaticInitialize(ID3D12Device* device,Camera* camera) {
 	// nullptrチェック

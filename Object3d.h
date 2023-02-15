@@ -13,7 +13,7 @@
 #include "WorldTransform.h"
 
 #include "Camera.h"
-#include "Light.h"
+#include "DirectionalLight.h"
 
 /// <summary>
 /// 3Dオブジェクト
@@ -47,7 +47,7 @@ public: // 静的メンバ関数
 	// 3Dオブジェクト生成
 	static Object3d* Create();
 
-	static void SetLight(Light* light) {
+	static void SetLight(DirectionalLight* light) {
 		Object3d::light_ = light;
 	}
 
@@ -70,7 +70,7 @@ private: // 静的メンバ変数
 	static Camera* camera_;
 
 	//ライト
-	static Light* light_;
+	static DirectionalLight* light_;
 
 private:// 静的メンバ関数
 	// グラフィックパイプライン生成
