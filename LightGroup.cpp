@@ -69,3 +69,27 @@ void LightGroup::TransferConstBuffer() {
 		constBuff_->Unmap(0, nullptr);
 	}
 }
+
+//有効フラグをセット
+void LightGroup::SetDirActive(int index, bool active) {
+	assert(0 <= index && index < DirLightNum_);
+
+	dirLights_[index].SetActive(active);
+}
+
+//平行光源のライト方向をセット
+void LightGroup::SetDirLightDir(int index, const Vector3& lightdir)  {
+	assert(0 <= index && index < DirLightNum_);
+
+	dirLights_[index].SetLightDir(lightdir);
+
+	dirty_ = true;
+}
+//平行光源のライト色をセット
+void LightGroup::SetDirLightColor(int index, const Vector3& lightcolor)  {
+	assert(0 <= index && index < DirLightNum_);
+
+	dirLights_[index].SetLightColor(lightcolor);
+
+	dirty_ = true;
+}

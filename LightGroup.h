@@ -33,6 +33,24 @@ public://メンバ関数
 	//定数バッファへのデータ転送
 	void TransferConstBuffer();
 
+
+
+	//環境光色をセット
+	void SetAmbientColor(const Vector3& color) {
+		//正規化してセット
+		ambientColor_ = color;
+		dirty_ = true;
+	}
+
+	//有効フラグをセット
+	void SetDirActive(int index, bool active);
+
+	//平行光源のライト方向をセット
+	void SetDirLightDir(int index, const Vector3& lightdir);
+
+	//平行光源のライト色をセット
+	void SetDirLightColor(int index, const Vector3& lightcolor);
+
 private://静的メンバ変数
 	//デバイス
 	static ComPtr<ID3D12Device> device_;
