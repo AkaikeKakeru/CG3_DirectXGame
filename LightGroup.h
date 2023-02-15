@@ -14,7 +14,7 @@ public://定数
 
 public://サブクラス
 	//定数バッファ用データ構造体
-	struct ConstBufferDat {
+	struct ConstBufferData {
 		//環境光の色
 		Vector3 ambientColor_;
 		float pad1_;
