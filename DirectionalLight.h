@@ -32,12 +32,12 @@ public://メンバ関数
 	//定数バッファへのデータ転送
 	void TransferConstBuffer();
 
-	//ライト方向をセット
+	//ライト方向を取得
 	const Vector3& GetLightDir() {
 		return lightdir_;
 	}
 
-	//ライト色をセット
+	//ライト色を取得
 	const Vector3&  GetLightColor() {
 		return lightcolor_;
 	}
