@@ -52,7 +52,7 @@ void DirectionalLight::CreateConstBuffer() {
 	// リソース設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Width = (sizeof(ConstBufferDataLight) + 0xff) & ~0xff;
+	resourceDesc.Width = (sizeof(ConstBufferData) + 0xff) & ~0xff;
 	resourceDesc.Height = 1;
 	resourceDesc.DepthOrArraySize = 1;
 	resourceDesc.MipLevels = 1;
@@ -70,7 +70,7 @@ void DirectionalLight::CreateConstBuffer() {
 void DirectionalLight::TransferConstBuffer() {
 	HRESULT result;
 
-	ConstBufferDataLight* constMap = nullptr;
+	ConstBufferData* constMap = nullptr;
 	result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
 		constMap->lightv_ = -lightdir_;
