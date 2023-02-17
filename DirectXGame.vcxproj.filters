@@ -96,9 +96,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\3d\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>ソース ファイル\3d\Light</Filter>
-    </ClCompile>
     <ClCompile Include="WinApp.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
