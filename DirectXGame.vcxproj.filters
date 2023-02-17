@@ -108,9 +108,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\3d\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>ソース ファイル\3d\Light</Filter>
-    </ClCompile>
     <ClCompile Include="LightGroup.cpp">
       <Filter>ソース ファイル\3d\Light</Filter>
     </ClCompile>
