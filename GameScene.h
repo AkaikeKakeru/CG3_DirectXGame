@@ -80,9 +80,9 @@ private: // メンバ変数
 	float lightColor_2[lightCountNumber] = { 0,0,1 };
 
 	//点光源初期値
-	float pointLightPos_[3] = { 0,0,0 };
-	float pointLightColor_[3] = { 1,1,1 };
-	float pointLightAtten_[3] = { 0.3f,0.1f,0.1f };
+	float pointLightPos_[lightCountNumber] = { 0,0,0 };
+	float pointLightColor_[lightCountNumber] = { 1,1,1 };
+	float pointLightAtten_[lightCountNumber] = { 0.3f,0.1f,0.1f };
 
 private: // メンバ変数
 	//Sprite* sprite1 = nullptr;

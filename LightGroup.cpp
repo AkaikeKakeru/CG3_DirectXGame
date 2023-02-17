@@ -95,7 +95,7 @@ void LightGroup::TransferConstBuffer() {
 			}
 		}
 
-		//平行光源
+		//点光源
 		for (int i = 0; i < PointLightNum_; i++) {
 			//ライトが有効なら設定を転送
 			if (pointLights_[i].IsActive()) {

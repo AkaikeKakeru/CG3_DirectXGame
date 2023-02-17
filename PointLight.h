@@ -6,7 +6,7 @@ public: //サブクラス
 	//定数バッファ用データ構造体
 	struct ConstbufferData {
 		Vector3 lightpos_;
-		float pa1;
+		float pad1;
 		Vector3 lightcolor_;
 		float pad2;
 		Vector3 lightatten_;
