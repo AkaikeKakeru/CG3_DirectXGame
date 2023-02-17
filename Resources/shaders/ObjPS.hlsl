@@ -62,7 +62,6 @@ float4 main(VSOutput input) : SV_TARGET{
 			//phong
 			//全て加算
 			shadecolor.rgb += atten * (diffuse + specular) * pointLights[i].lightcolor;
-			shadecolor.a += m_alpha;
 		}
 	}
 
