@@ -8,6 +8,8 @@
 #include <sstream>
 #include <iomanip>
 
+#include <imgui.h>
+
 using namespace DirectX;
 
 template <class T>
@@ -165,6 +167,22 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
+#pragma region imgui描画
+	ImGui::Begin("Light");
+
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(500, 200));
+
+	ImGui::ColorEdit3("ambientColor", ambientColor_, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir0", lightDir_[0]);
+	ImGui::ColorEdit3("lightColor0", lightColor_[0], ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir1", lightDir_[1]);
+	ImGui::ColorEdit3("lightColor1", lightColor_[1], ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir2", lightDir_[2]);
+	ImGui::ColorEdit3("lightColor2", lightColor_[2], ImGuiColorEditFlags_Float);
+	ImGui::End();
+#pragma endregion
+
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();
 
